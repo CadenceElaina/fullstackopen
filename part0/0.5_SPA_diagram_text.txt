@@ -1,0 +1,15 @@
+https://mermaid.live/edit#pako:eNqtVF1v0zAU_StXfm6dNmHtFk19YEwgxAApfYLswY1vErPEDrZTNlX571w3XSnSJiHRKIrie4_Puff4Y8cKI5GlzOHPHnWB75SorGhzDfS8teaXQztdrTK0W7QpfFivv8L72zXU3ncujSLne6nQ8cLxGhun9IPipYrwUbRdg6LrIteJkW3kmBLbgTfQ3X2CG6oApnDAnUWzFUpT2gXCF2RvsuxZ9RR5rnb5j9eEP2Yn3R5g2ngEQ0g4wg4_gI9Y9B5dmBfWCa43NlqBr4UHGxbM-ZD78hmk8AJKa1pwe9WztROIqVCjX-no-y6nLaQ9ap-zNGc5m-SMJuF-FM_iZDqjd7mOkzSepfOEz5KLbzkbJsA5h_t_dcDXCLglFaiFlg2l_vJCS7QjKJC50Yow_OMOFWn2oU5U-H_-lGKrqGlOn1y_YMpJnk1Yi5Z2maRDtguyOaMi2uAPBKfsA5mmB8KJ3pvsSRcs9bbHCeu74OPhQLK0FI07Rm-l8sYeg40RZABLd8w_deE4V8p5oqQiSlWFeG8bCj_3FdK8Ur7uN7wwbeSUrIX19fZqES3ixaWIE1wsE3GRJLLYzK8uy_jNvJTL2TwWbBgmDPf6d-Pdsb9Cht9y_XUp
+
+sequenceDiagram
+    Browser->>Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/spa
+    Server-->>Browser: HTML Code - spa
+  Browser->>Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
+  Server-->>Browser: CSS Code - main.css
+  Browser->>Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/spa.js
+  Server-->>Browser: JS Code - spa.js
+  note over Browser: Browser executes JS code <br/> that requests JSON data from server
+  Browser->>Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+  Server-->>Browser: [{"content":"","date":"2023-03-07T23:20:13.035Z"}, ... ]
+  note over Browser: Browser executes the event handler <br/> that renders the notes from the JSON data onto the page
+  Browser->>Server: HTTP GET https://studies.cs.helsinki.fi/favicon.ico
+Server-->>Browser: favicon.ico
