@@ -1,0 +1,5 @@
+sequenceDiagram
+note over Browser: When you submit a new note <br> a POST request is sent with the new <br> note as JSON data
+    Browser->>Server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+    Server-->>Browser: Status Code: 201
+    note over Browser: The page does not reload <br> the event handler handles the form's <br> submit and prevents the page <br> from reloading with e.preventDefault() <br> This prevents a new GET request <br> to the server. <br>Instead the list of notes is rerendered <br>with the new note

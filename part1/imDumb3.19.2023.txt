@@ -1,0 +1,90 @@
+import { useState } from 'react'
+import './App.css'
+const Button = ({ handleClick, text }) => {
+  // console.log(handleClick, text)
+  return (
+    <button onClick={handleClick}>{text}</button>
+  )
+}
+
+const App = () => {
+  // save clicks of each button to its own state
+  const [reviews, setReviews] = useState(
+    {
+      good: 0,
+      neutral: 0,
+      bad: 0
+    }
+  )
+  const [good, setGood] = useState(0)
+  const [neutral, setNeutral] = useState(0)
+  const [bad, setBad] = useState(0)
+  const [average, setAverage] = useState(0)
+  const [positive, setPositive] = useState(0)
+  const [totalReviews, setTotalReviews] = useState(0)
+
+  const incGood = () => {
+    const updatedGood = good + 1
+    const updatedReviews = totalReviews + 1
+    setGood(updatedGood)
+    setTotalReviews(updatedReviews)
+    const newReviews = {
+      ...reviews, good: updatedGood
+    }
+    setReviews(newReviews)
+    console.log(reviews)
+    //console.log('good: ' + updatedGood, 'bad: ' + bad, 'neutral: ' + neutral, 'total: ' + updatedReviews)
+  }
+  const incNeutral = () => {
+    const updatedReviews = totalReviews + 1
+    const updatedNeutral = neutral + 1
+    setNeutral(updatedNeutral)
+    setTotalReviews(updatedReviews)
+    const newReviews = {
+      ...reviews, neutral: updatedNeutral
+    }
+    setReviews(newReviews)
+    console.log(reviews)
+    //console.log('good: ' + good, 'bad: ' + bad, 'neutral: ' + updatedNeutral, 'total: ' + updatedReviews,)
+  }
+  const incBad = () => {
+    const updatedBad = bad + 1
+    const updatedReviews = totalReviews + 1
+    setBad(updatedBad)
+    setTotalReviews(updatedReviews)
+    const newReviews = {
+      ...reviews, bad: updatedBad
+    }
+    setReviews(newReviews)
+    console.log(reviews)
+    // console.log('good: ' + good, 'bad: ' + updatedBad, 'neutral: ' + neutral, 'total: ' + updatedReviews,)
+    const averagePercentage = ((updatedBad * -1 + good) * 100 / updatedReviews * 100)
+
+  }
+
+
+  return (
+    <div className='container'>
+      <h2 id='feedback'>give feedback</h2>
+      <div className='buttons_container'>
+
+        <Button handleClick={incGood} text='Good' />
+        <Button handleClick={incNeutral} text='Neutral' />
+        <Button handleClick={incBad} text='Bad' />
+      </div>
+      <div className='results_container'>
+        <h2>statistics</h2>
+        <div className='results'>
+          <p>Good: {good}</p>
+          <p>Neutral: {neutral}</p>
+          <p>Bad: {bad}</p>
+          <p>Total Reviews: {totalReviews}</p>
+          <p>Average: {average}%</p>
+          <p>Positive: {positive}</p>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default App

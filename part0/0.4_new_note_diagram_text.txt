@@ -1,0 +1,18 @@
+https://mermaid.live/edit#pako:eNqtVW1r2zAQ_iuHvuyL4yTOljZmFLa2rBt9Y_YYbB5Dsc6x1kTyJDlpCfnvO1lJ20A72KgxxjrdPXfP4zt5zUotkKXM4u8WVYknks8MXxQK6Hpv9Mqi6R0dZWiWaFI4y_NruL7Kcqida2za71vXCok2Lm1c49xKdSPjSvbxli-aOfKm6Stc_VTaYcC8pDfQBAY7TChYXiPYbgkGbaOVsLCSrg75rOOuteArhdEgieHt1PSP8lpaoJvDl8_nFCakwdJFIW5Vy7IG9wDL7Y3t1tPACZwGoSmYqgt4XaoPpzlBkRTWeQ8fwIWgmiwIrKRCAVJ15hq5QPPKwrkuuZNaQW_P3TO2ccEC68C1R0puNU0hC6yOiVXqaVH8joRPPd_CprCnpUf968fxDP7h22zxnqjvLL8476qjwnZuL5JzwaWi7WfSHmfZLusjx5dL_OuZvJ_203ZuD71675aHFrIr36qtCj31iS95VhrZuNCkXIldF20dsqtLENxxqIxePOrLQr0IMw9NJWtVqCeofV8XNObKoXIFSwt2pwsWFYyCsFsng2TUG9B9kCfDNJmkg1E8ngy_FWwTQRzHPwr1hBIF-1pjmIWOWc0tTJEsFbqyRhHtjRveYtlSE5E2gEuqhPyVmKOJwvRtJ9agoqkKonVNt5vChs8QWuI-65YnVxe9d9cfu_n6fwUrvpQkTEyPe-Ee6ba3zSK2QEO9Iei0XPsRLBhVsvASghfT3PhiNuTHW6ezO1Wy1JkWI9Y2XurtybpvPBXSacPSis8tGefaHyosXTN31_hjeSatI0SqopIzb2_NnMw7Xn47ntGB107jUi_6VoqaG1cvJ-P-OBkf8mSE44MRfzMaiXI6nBxWyethJQ4Gw4SzzSZi2OW_CP-A7lew-QM5fxXl
+
+sequenceDiagram
+    Browser->>Server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note
+    Note over Server:  "The server responds with HTTP status code 302. <br/>This is a URL redirect, with which the server asks the browser to do a new <br/>HTTP GET request to the address defined in the header's Location - the address notes."
+    Server-->>Browser: Status Code: 302 - redirect to location: /exampleapp/notes
+    Browser->>Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/notes
+ Server-->>Browser: HTML Code - notes
+ Browser->>Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
+ Server-->>Browser: CSS Code - main.css
+ Browser->>Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.js
+ Server-->>Browser: JS Code - main.js
+ Note over Browser: The broswer runs the JavaScript code and requests the JSON data from the server
+Browser->>Server: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+Server-->>Browser: [{"content":"yo","date":"2023-03-07T21:29:03.691Z"}, ...]
+Note over Browser: "When the data has been fetched, the browser executes an event handler, <br/> which renders the notes to the page using the DOM-API."
+Browser->>Server: HTTP GET https://studies.cs.helsinki.fi/favicon.ico
+Server->>Browser: favicon.ico
