@@ -1,0 +1,37 @@
+    /*     persons.map((person) => {
+          if (person.name.toLowerCase() === e.target.value.toLowerCase() || person.number === e.target.value) {
+    
+            if (person.number === e.target.value) {
+              //console.log(person.name, e.target.value)
+              alert(`${person.number} is already added to phonebook`)
+              setNewName('')
+            }
+            if (person.name.toLowerCase() === e.target.value.toLowerCase()) {
+              //console.log(person.name, e.target.value)
+              alert(`${person.name} is already added to phonebook`)
+              setNewNumber('')
+            }
+            return
+          }
+        }) */
+          /*   const [persons, setPersons] = useState([
+      { name: 'Arto Hellas', number: '040-123456', id: 1 },
+      { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
+      { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
+      { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }
+    ]) */
+     {/*  {personsToShow.map(person =>
+        <p key={person.id}>{person.name} {person.number}</p>
+      )} */}
+      {/*   {persons.map((person) => <li key={person.id}>{person.name} {person.number}</li>)} */}
+
+      useEffect(() => {
+    //console.log('effect')
+    axios
+      .get('http://localhost:3001/persons')
+      .then(response => {
+        //console.log('promise fulfilled')
+        setPersons(response.data)
+      })
+  }, [])
+  //console.log(persons)
