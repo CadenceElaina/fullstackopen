@@ -5,7 +5,8 @@ const Countries = ({ countries, setCountries }) => {
     return (
         <div>
             {countries.map((country) => (
-                <p key={country.name.common}>{country.name.common} <button onClick={() => setCountries([country])}>show</button></p>
+                <p key={country.name.common}>{country.name.common}
+                    <button onClick={() => setCountries([country])}>show</button></p>
             ))}
         </div>
     )

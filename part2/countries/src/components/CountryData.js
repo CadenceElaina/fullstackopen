@@ -12,7 +12,8 @@ const CountryData = ({ country }) => {
     console.log(process.env.REACT_APP_API_KEY)
     useEffect(() => {
         axios
-            .get(`https://api.openweathermap.org/data/3.0/onecall?lat={${lat}}&lon={${lon}}&exclude=hourly,daily&appid={${key}}`)
+            .get(`https://api.openweathermap.org/data/2.5/weather?q=${country.capital}`)
+            /*  .get(`https://api.openweathermap.org/data/3.0/onecall?lat={${lat}}&lon={${lon}}&exclude={part}&appid={3634acd08c713abd4e18a0afa230b93c}`) */
             .then((response) => {
                 /*  weather = response */
                 console.log(response)
