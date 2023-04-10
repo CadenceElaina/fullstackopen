@@ -1,7 +1,9 @@
+require('dotenv').config()
 const express = require('express')
 const app = express()
 const morgan = require('morgan')
 const cors = require('cors')
+const Person = require('./models/person')
 
 app.use(cors())
 app.use(express.static('build'))
@@ -17,12 +19,22 @@ app.use(morgan((tokens, req, res) => {
     ].join(' ')
 }))
 
+/* const errorHandler = (error, request, response, next) => {
+    console.error(error.message)
+
+    if (error.name === 'CastError') {
+        return response.status(400).send({ error: 'malformatted id' })
+    }
+
+    next(error)
+} */
+
 /* morgan.token("data", (request) => {
     return request.method === "POST" ? JSON.stringify(request.body) : " ";
 })
 
 app.use(morgan(":method :url :status :res[content-length] - :response-time ms")) */
-let persons = [
+/* let persons = [
     {
         "id": 1,
         "name": "Arto Hellas",
@@ -43,15 +55,7 @@ let persons = [
         "name": "Mary Poppendieck",
         "number": "39-23-6423122"
     }
-]
-
-app.get('/', (request, response) => {
-    response.send('<h1>Hi uwu ^-^ D:</h1>')
-})
-
-app.get('/api/persons', (request, response) => {
-    response.json(persons)
-})
+] */
 
 const generateId = () => {
     /*  const maxId = persons.length > 0
@@ -62,79 +66,139 @@ const generateId = () => {
     return rand
 }
 
-app.post('/api/persons/', (request, response) => {
-    const body = request.body
+app.get('/', (request, response) => {
+    response.send('<h1>Hi uwu ^-^ D:</h1>')
+})
 
-    if (!body.name) {
+app.get('/api/persons', (request, response) => {
+    Person.find({}).then((persons) => {
+        response.json(persons);
+    });
+    /*  response.json(persons) */
+})
+
+app.get('/api/persons/:id', (request, response, next) => {
+    Person.findById(request.params.id)
+        .then((person) => {
+            if (person) {
+                response.json(person)
+            } else {
+                response.status(404).end()
+            }
+        })
+        .catch((error) => next(error))
+    /*    const id = Number(request.params.id)
+       const person = persons.find(person => person.id === id)
+       if (person) {
+           response.json(person)
+       } else {
+           response.status(404).end()
+       } */
+})
+
+app.get('/info', (request, response, next) => {
+    Person.find({})
+        .then((people) => {
+            response.send(
+                `<p>Phonebook has info for ${people.length
+                } people</p><p>${new Date()}</p>`
+            )
+        })
+        .catch((error) => next(error))
+
+
+    /*     const currentDate = new Date().toLocaleDateString()
+        const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone */
+    /*     console.log(timeZone, currentDate) */
+    /*   const currentDate = new Date().toString()
+
+  response.send(`
+  <div>
+  <p>Phonebook has info for ${persons.length} people</p>
+  <p>${currentDate}</p>
+  </div>
+  `) */
+})
+
+app.delete('/api/persons/:id', (request, response, next) => {
+    Person.findByIdAndRemove(request.params.id)
+        .then(result => {
+            response.status(204).end()
+        })
+        .catch(error => next(error))
+})
+
+app.post('/api/persons', (request, response) => {
+    /* const body = request.body */
+    const { name, number } = request.body
+
+    if (!name) {
         return response.status(400).json({
             error: 'name is missing'
         })
     }
-    if (!body.number) {
+    if (!number) {
         return response.status(400).json({
             error: 'number is missing'
         })
     }
-    if (persons.some(person => person.name === body.name)) {
+    if (persons.some(person => person.name === name)) {
         return response.status(400).json({
             error: 'name must be unique'
         })
     }
-    if (persons.some(person => person.number === body.number)) {
+    if (persons.some(person => person.number === number)) {
         return response.status(400).json({
             error: 'number must be unique'
         })
     }
 
-
-
-    const person = {
+    const person = new Person({
         id: generateId(),
-        name: body.name,
-        number: body.number,
-    }
+        name: name,
+        number: number,
+    })
 
-    persons = persons.concat(person)
-
-    response.json(person)
+    person
+        .save()
+        .then((savedPerson) => {
+            response.json(savedPerson)
+        })
+        .catch((error) => next(error))
+    /*   persons = persons.concat(person)
+  
+      response.json(person) */
 })
 
-app.get('/info', (request, response) => {
-    /*     const currentDate = new Date().toLocaleDateString()
-        const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone */
-    const currentDate = new Date().toString()
-    /*     console.log(timeZone, currentDate) */
-    response.send(`
-    <div>
-    <p>Phonebook has info for ${persons.length} people</p>
-    <p>${currentDate}</p>
-    </div>
-    `)
-})
 
-app.get('/api/persons/:id', (request, response) => {
-    const id = Number(request.params.id)
-    const person = persons.find(person => person.id === id)
-    if (person) {
-        response.json(person)
-    } else {
-        response.status(404).end()
-    }
-})
-
-app.delete('/api/persons/:id', (request, response) => {
+/* app.delete('/api/persons/:id', (request, response) => {
     const id = Number(request.params.id)
     persons = persons.filter(person => person.id !== id)
 
     response.status(204).end()
-})
+}) */
+
+
+
+const errorHandler = (error, request, response, next) => {
+    console.error(error.message);
+
+    if (error.name === "CastError") {
+        return response.status(400).send({ error: "malformatted id" });
+    } else if (error.name === "ValidationError") {
+        return response.status(400).json({ error: error.message });
+    }
+
+    next(error);
+};
+
+app.use(errorHandler);
 
 
 
 
-
-
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT
+/* const PORT = process.env.PORT || 3001 */
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`)
 })
