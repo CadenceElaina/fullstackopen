@@ -1,8 +1,5 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
-
 import personService from './services/persons'
-
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
@@ -10,158 +7,128 @@ import Notification from './components/Notification'
 
 const App = () => {
   const [persons, setPersons] = useState([])
-  const [newName, setNewName] = useState('')
-  const [newNumber, setNewNumber] = useState('')
+  const [newPerson, setNewPerson] = useState({ name: "", number: "" })
   const [filteredSearch, setFilteredSearch] = useState('')
-  const [notification, setNotification] = useState(null)
+  const [personsToShow, setPersonsToShow] = useState([]);
+  const [message, setMessage] = useState(null)
+
   useEffect(() => {
     personService
       .getAll()
       .then(initialPersons => {
         setPersons(initialPersons)
+        setPersonsToShow(initialPersons);
       })
   }, [])
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setMessage(null);
+    }, 5000);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [message]);
+
+
   const handleFilteredSearch = (e) => {
     //console.log(e.target.value)
-    setFilteredSearch(e.target.value)
+    const search = e.target.value
+    setFilteredSearch(search)
+    setPersonsToShow(
+      persons.filter((person) => person.name.toLowerCase().includes(search))
+    )
   }
 
-  const handleNameChange = (e) => {
-    setNewName(e.target.value)
-    persons.map((person) => {
-      if (person.name.toLowerCase() === e.target.value.toLowerCase()) {
-        //console.log(person.name, e.target.value)
-        /* return */ alert(`${person.name} is already added to phonebook`)
-      }
-    })
-    //console.log(newName)
+  const handleChange = (e) => {
+    const { name, value } = e.target
+    setNewPerson({ ...newPerson, [name]: value })
+    //https://medium.com/@bretdoucette/understanding-this-setstate-name-value-a5ef7b4ea2b4
   }
-  const handleNumberChange = (e) => {
-    setNewNumber(e.target.value)
-    persons.map((person) => {
-      if (person.number === e.target.value) {
-        //console.log(person.name, e.target.value)
-        /* return */ alert(`${person.number} is already added to phonebook`)
-      }
-    })
-    //console.log(newName)
-  }
+
   const addPerson = (e) => {
+    //console.log(person, persons)
     e.preventDefault()
-    const personObject = {
-      name: newName,
-      number: newNumber,
-      id: newName,
-    }
-    const person = persons.find(p => p.id === newName)
-    if (!person) {
-
+    const currentPerson = persons.filter(
+      (person) => person.name === newPerson.name
+    )
+    if (currentPerson.length === 0) {
       personService
-        .create(personObject)
+        .create(newPerson)
         .then(returnedPerson => {
           setPersons(persons.concat(returnedPerson))
-          setNotification(`Added ${returnedPerson.name}`)
-          setNewName('')
-          setNewNumber('')
-          setTimeout(() => {
-            setNotification(null)
-          }, 5000)
+          setPersonsToShow(persons.concat(returnedPerson))
+          setMessage(`Added ${newPerson.name} to phonebook`)
+          /*    setTimeout(() => {
+               setNotification(null)
+             }, 5000) */
         })
-
+        .catch(error => {
+          console.log(error.response.data.error)
+          setMessage(error.response.data.error)
+        })
     }
     else {
-      //console.log(person)
-      let result = window.confirm(`${newName} is already added to phonebook, replace the old
-      number with ${newNumber}?`)
-      if (result/*  === true */) {
-        const changedPerson = { ...person, number: newNumber/* , id: newNumber  */ }
+      //console.log(person, persons)
+      if (window.confirm(`${newPerson.name} is already added to phonebook, replace the old
+      number with ${newPerson.number}?`)) {
         personService
-          .update(person.id, changedPerson)
-          .then(changedPerson => {
-            const oldNumber = persons.find(p => p.id === person.id)
-            console.log(oldNumber)
-            setPersons(persons.map(p => p.id !== person.id ? p : changedPerson))
-            setNotification(`Changed ${changedPerson.name}'s number from ${oldNumber.number} to ${newNumber}`)
-            setTimeout(() => {
-              setNotification(null)
-            }, 5000)
+          .update(currentPerson[0].id, newPerson)
+          .then((returnedPerson) => {
+            const updatedPersons = persons.map((person) => person.id !== returnedPerson.id ? person : returnedPerson)
+            setPersons(updatedPersons)
+            setPersonsToShow(updatedPersons)
+            setMessage(`Updated ${newPerson.name}'s number`);
           })
-          .catch(error => {
-            setNotification(`Information of ${person.name} has already been removed from server`)
-            setTimeout(() => {
-              setNotification(null)
-            }, 5000)
-            //Update the UI to show that the person you are editing has been removed from the server in another browser
-            setPersons(persons.filter(p => p.id !== person.id))
-            console.log(error)
-          })
-        /* .then(changedPerson => {
-          setPersons(persons.map(person => person.id !== person.id ? person : changedPerson))
-        }) */
-        //console.log(persons.map(p => p.id !== person.id ? p : changedPerson))
+          .catch(error => setMessage(error.response.data.error))
       }
-      setNewName('')
-      setNewNumber('')
     }
-    /*  axios
-       .post('http://localhost:3001/persons', personObject)
-       .then(response => {
-         setPersons(persons.concat(response.data))
-         setNewName('')
-         setNewNumber('')
-       }) */
-    /*  request.then(response => response.data)
-     setPersons(persons.concat(personObject))
-     setNewName('')
-     setNewNumber('') */
+    setNewPerson({ name: "", number: "" })
   }
 
-  const deletePerson = id => {
-    let person = persons.find(p => p.id === id)
-    person = person.name
-    let result = window.confirm(`Delete ${person} ?`)
-    if (result === true) {
-
-
+  const deletePerson = (id, name) => {
+    /*     let person = persons.find(p => p.id === id)
+        person = person.name */
+    let result = window.confirm(`Delete ${name} ?`)
+    if (result) {
       console.log(`delete id:${id}`)
 
       /*  const changedPerson = {...person, } */
       personService
         .remove(id)
-        .then(returnedPerson => {
-          setPersons(persons.filter(person => person.id !== id))
+        .then(response => {
+          const updatedPersons = persons.filter(person => person.id !== id)
+          setPersons(updatedPersons)
+          setPersonsToShow(updatedPersons)
+          setMessage(`Removed ${name} from phonebook`)
         })
-        .catch(error => {
-          setNotification(`Information of ${person} has already been removed from server`)
-          console.log(error)
-        })
+      /*  .catch(error => {
+         setNotification(`Information of ${name} has already been removed from server`)
+         console.log(error)
+       }) */
       /*  .then(response => console.log(response)) */
     }
 
   }
 
-  const personsToShow = filteredSearch === ''
+  /* const personsToShow = filteredSearch === ''
     ? persons
-    : persons.filter(person => person.name.toLowerCase().includes(filteredSearch.toLowerCase()))
+    : persons.filter(person => person.name.toLowerCase().includes(filteredSearch.toLowerCase())) */
 
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={notification} />
+      <Notification message={message} />
       <Filter filteredSearch={filteredSearch} handleFilteredSearch={handleFilteredSearch} />
       <PersonForm
         addPerson={addPerson}
-        newName={newName}
-        handleNameChange={handleNameChange}
-        newNumber={newNumber}
-        handleNumberChange={handleNumberChange} />
+        newPerson={newPerson}
+        handleChange={handleChange}
+      />
       <h3>Numbers</h3>
       <Persons
-        persons={personsToShow}
+        personsToShow={personsToShow}
         deletePerson={deletePerson} />
-
-      ...
     </div>
   )
 }
