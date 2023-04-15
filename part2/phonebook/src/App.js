@@ -30,7 +30,6 @@ const App = () => {
     };
   }, [message]);
 
-
   const handleFilteredSearch = (e) => {
     //console.log(e.target.value)
     const search = e.target.value
