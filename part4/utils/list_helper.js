@@ -83,6 +83,50 @@ const authorWithMostBlogs = (blogs) => {
   // console.log(author)
   // return authors
 }
+
+const mostLikes = (blogs) => {
+  if (blogs.length === 0) {
+    return null
+  }
+  let most = 0
+  blogs.map((blog, i) => {
+    if (blog.likes > most) {
+      //console.log(blog.likes)
+      most = blog.likes
+    }
+  })
+  let maxLikes = blogs.filter(blog => blog.likes === most)
+  let uniqueNames = []
+  maxLikes.map(blog => {
+    if (!uniqueNames.includes(blog.author)) {
+      /* console.log(blog.author) */
+      uniqueNames.push(blog.author)
+    }
+  })
+  console.log(uniqueNames)
+  //let names = uniqueNames.map(blog => blog.author)
+  //console.log(names)
+
+  let authorsWithMostLikes
+  let authorWithMostLikes
+
+  if (uniqueNames.length > 1) {
+    authorsWithMostLikes = {
+      authors: uniqueNames,
+      likes: most
+    }
+    return authorsWithMostLikes
+  }
+  else {
+    authorWithMostLikes = {
+      author: uniqueNames,
+      likes: most
+    }
+    return authorWithMostLikes
+  }
+
+  // return most
+}
 module.exports = {
-  totalLikes, favoriteBlog, authorWithMostBlogs
+  totalLikes, favoriteBlog, authorWithMostBlogs, mostLikes
 }
