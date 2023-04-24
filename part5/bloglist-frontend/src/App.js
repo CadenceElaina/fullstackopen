@@ -46,7 +46,7 @@ const App = () => {
       blogService.setToken(user.token);
       setUser(user);
     } catch (exception) {
-      setMessage("Error: Wrong credentials");
+      setMessage("error: Wrong credentials");
     }
   };
 
