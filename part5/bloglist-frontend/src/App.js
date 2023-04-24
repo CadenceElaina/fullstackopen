@@ -74,13 +74,25 @@ const App = () => {
   const updateLikes = async (id, updatedBlog) => {
     try {
       const response = await blogService.update(id, updatedBlog);
+
       setBlogs(
         blogs.map((blog) => (blog.id === response.id ? response : blog))
       );
     } catch (exception) {
-      setMessage("error " + exception.response.data.error)
+      setMessage("error" + exception.response.data.error);
     }
-  }
+  };
+
+  const removeBlog = async (blogId) => {
+    try {
+      await blogService.remove(blogId);
+      const updatedBlogs = blogs.filter(blog => blog.id !== blogId);
+      setBlogs(updatedBlogs);
+      setMessage("Blog removed");
+    } catch (exception) {
+      setMessage("error" + exception.response.data.error);
+    }
+  };
 
   const blogFormRef = useRef();
 
@@ -104,8 +116,8 @@ const App = () => {
             <BlogForm createBlog={createBlog} />
           </Togglable>
 
-          {blogs.map(blog =>
-            <Blog key={blog.id} blog={blog} updateLikes={updateLikes} />
+          {blogs.sort((a, b) => b.likes - a.likes).map(blog =>
+            <Blog key={blog.id} blog={blog} updateLikes={updateLikes} removeBlog={removeBlog} />
           )}
         </div>
       )}
