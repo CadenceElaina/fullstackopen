@@ -26,12 +26,14 @@ const Blog = ({ blog, updateLikes, removeBlog }) => {
     }
   };
   return (
-    <div>
-      <div>
-        {blog.title}{blog.author} <button onClick={toggleVisibility}>{visible ? 'hide' : 'show'}</button>
+    <div className='blog'>
+      <div className='blog-title'>
+        <span className="title">{blog.title} - </span>
+        <span className="author">{blog.author}</span>{" "}
+        <button onClick={toggleVisibility} className='toggle-button'>{visible ? 'hide' : 'show'}</button>
       </div>
-      <div style={showWhenVisible}>
-        <p>Likes: {blog.likes} <button onClick={handleLike}>like</button> </p>
+      <div style={showWhenVisible} className='blog-details'>
+        <p>Likes: <span className='blog-likes'>{blog.likes}</span> <button onClick={handleLike} className='like-button'>like</button> </p>
         Url: <a href={`${blog.url}`} target='_blank' rel='noreferrer'>{blog.url}</a>
         <button onClick={handleRemove}>remove</button>
       </div>

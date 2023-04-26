@@ -3,7 +3,10 @@
 * {
   font-family: "Noto Sans", sans-serif;
 }
-
+body{
+  background-color: #333;
+  color: white;
+}
 button {
   cursor: pointer;
   border: 1px solid black;
@@ -28,4 +31,13 @@ button {
 .header-title,
 .success {
   color: green;
+}
+
+.blog{
+  background-color: #999;
+  margin: 0 auto;
+  border: 1px solid black;
+}
+.blog-title{
+  font-size: 1.2rem;
 }

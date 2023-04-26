@@ -15,7 +15,7 @@ const BlogForm = ({ createBlog }) => {
   };
 
   return (
-    <div>
+    <div className="blog-form">
       <h2>Create new blog</h2>
       <form onSubmit={handleCreateBlog}>
         <div>
@@ -45,7 +45,7 @@ const BlogForm = ({ createBlog }) => {
             onChange={handleInputChange}
           />
         </div>
-        <button id="create-blog-btn" type="submit">
+        <button id="create-blog-btn" className="create-blog" type="submit">
           create
         </button>
       </form>
