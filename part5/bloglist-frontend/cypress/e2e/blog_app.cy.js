@@ -130,13 +130,14 @@ describe('Blog app', function () {
           cy.visit('http://localhost:3000')
         })
 
-        it('second user succeeds with correct credentials', function() {
+        it('only the creator can see the delete button of a blog, not anyone else.', function() {
           cy.contains('login').click()
           cy.get('#username').type('test1')
           cy.get('#password').type('test1')
           cy.get('#login-button').click()
     
           cy.contains('test1 logged in')
+          cy.get('html').should('not.contain', '.remove-button')
         })
       })
     })
