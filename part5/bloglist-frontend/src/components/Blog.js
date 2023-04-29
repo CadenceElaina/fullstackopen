@@ -35,7 +35,7 @@ const Blog = ({ blog, updateLikes, removeBlog }) => {
       <div style={showWhenVisible} className='blog-details'>
         <p>Likes: <span className='blog-likes'>{blog.likes}</span> <button onClick={handleLike} className='like-button'>like</button> </p>
         Url: <a href={`${blog.url}`} target='_blank' rel='noreferrer'>{blog.url}</a>
-        <button onClick={handleRemove}>remove</button>
+        <button className='remove-button' onClick={handleRemove}>remove</button>
       </div>
     </div>
   )
