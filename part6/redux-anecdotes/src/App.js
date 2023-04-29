@@ -1,5 +1,5 @@
-import NewAnecdote from './components/NewAnecdote'
-import Anecdotes from './components/Anecdotes'
+import AncedoteForm from './components/AncedoteForm'
+import AnecdoteList from './components/AnecdoteList'
 
 const App = () => {
 /*   const vote = (id) => {
@@ -10,8 +10,9 @@ const App = () => {
 
   return (
     <div>
-      <Anecdotes />
-      <NewAnecdote />
+      <h2>Anecdotes</h2>
+      <AnecdoteList />
+      <AncedoteForm />
     </div>
   )
 }
