@@ -1,5 +1,6 @@
 import { useDispatch } from "react-redux";
 import { createAnecdote } from "../reducers/anecdoteReducer";
+import {createNotification} from '../reducers/notificationReducer'
 
 const AncedoteForm = (props) => {
   const dispatch = useDispatch()
@@ -10,6 +11,7 @@ const AncedoteForm = (props) => {
     //console.log(content)
     event.target.anecdote.value = ''
     dispatch(createAnecdote(content))
+    dispatch(createNotification(`You added ${content}`, 5))
   }
 
   return (
