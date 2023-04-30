@@ -19,13 +19,15 @@ const AnecdoteList = () => {
   const dispatch = useDispatch()
   const anecdotes = useSelector(state => {
     if(state.filter === null) {
-      return state.anecdotes
+     // console.log(state.anecdotes)
+      return [...state.anecdotes]
     }
-    return state.anecdotes.filter((ancedote) => 
+    //console.log(state.filter)
+     return state.anecdotes.filter((ancedote) => 
       ancedote.content
       .toLowerCase()
       .includes(state.filter.toLowerCase())
-    )
+    ) 
   })
 
   return (
