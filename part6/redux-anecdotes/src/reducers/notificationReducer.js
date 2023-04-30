@@ -17,12 +17,17 @@ export const { showNotification, hideNotification } = notificationSlice.actions
 
 
 
-export const createNotification = (text, timeout) => {
-  return dispatch => {
-    dispatch(showNotification(text))
-    setTimeout(() => {
+export const createNotification = (message, time) => {
+  return async (dispatch) => {
+    window.clearTimeout(window.time)
+    dispatch(showNotification(message))
+    window.timeout = setTimeout(
+      () => dispatch(hideNotification()),
+      time * 1000
+    )
+   /*  setTimeout(() => {
       dispatch(hideNotification())
-    }, timeout * 1000)
+    }, timeout * 1000) */
   }
 }
 

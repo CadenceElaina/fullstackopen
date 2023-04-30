@@ -3,22 +3,37 @@
     {
       "content": "action.payload",
       "id": 0,
-      "votes": 0
+      "votes": 1
     },
     {
       "content": "codingIsHard",
       "id": 1,
-      "votes": 1
+      "votes": 6
     },
     {
       "content": "apple",
       "id": "91255",
-      "votes": 0
+      "votes": 6
     },
     {
       "content": "!_!",
       "id": "33022",
+      "votes": 8
+    },
+    {
+      "content": "please",
+      "id": "61589",
       "votes": 0
+    },
+    {
+      "content": "111111111",
+      "id": "22408",
+      "votes": 0
+    },
+    {
+      "content": "asdf",
+      "id": "29747",
+      "votes": 2
     }
   ]
 }
