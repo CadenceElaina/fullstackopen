@@ -1,0 +1,24 @@
+{
+  "anecdotes": [
+    {
+      "content": "action.payload",
+      "id": 0,
+      "votes": 0
+    },
+    {
+      "content": "codingIsHard",
+      "id": 1,
+      "votes": 1
+    },
+    {
+      "content": "apple",
+      "id": "91255",
+      "votes": 0
+    },
+    {
+      "content": "!_!",
+      "id": "33022",
+      "votes": 0
+    }
+  ]
+}
