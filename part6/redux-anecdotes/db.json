@@ -8,32 +8,37 @@
     {
       "content": "codingIsHard",
       "id": 1,
-      "votes": 6
+      "votes": 8
     },
     {
       "content": "apple",
       "id": "91255",
-      "votes": 6
+      "votes": 7
     },
     {
       "content": "!_!",
       "id": "33022",
-      "votes": 8
+      "votes": 9
     },
     {
       "content": "please",
       "id": "61589",
-      "votes": 0
+      "votes": 1
     },
     {
       "content": "111111111",
       "id": "22408",
-      "votes": 0
+      "votes": 1
     },
     {
       "content": "asdf",
       "id": "29747",
       "votes": 2
+    },
+    {
+      "content": "lol",
+      "id": "10091",
+      "votes": 0
     }
   ]
 }

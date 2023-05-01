@@ -15,9 +15,7 @@ const notificationSlice = createSlice({
 
 export const { showNotification, hideNotification } = notificationSlice.actions
 
-
-
-export const createNotification = (message, time) => {
+export const setNotification = (message, time) => {
   return async (dispatch) => {
     window.clearTimeout(window.time)
     dispatch(showNotification(message))
