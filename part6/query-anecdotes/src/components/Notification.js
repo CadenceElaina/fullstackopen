@@ -8,7 +8,7 @@ const Notification = () => {
     marginBottom: 5
   }
   const notification = useNotificationValue()
-  console.log("Notification: ", notification)
+  //console.log("Notification: ", notification)
 
   return notification && <div style={style}>{notification}</div>
 }

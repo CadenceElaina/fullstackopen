@@ -1,6 +1,7 @@
 import { useMutation, useQueryClient } from 'react-query'
 import { createAnecdote } from '../requests'
-import { useNotificationDispatch } from '../NotificationContext'
+import { useNotificationDispatch } from '../NotificationContext' 
+
 const AnecdoteForm = () => {
   const dispatch = useNotificationDispatch()
   const queryClient = useQueryClient()
@@ -19,11 +20,32 @@ const AnecdoteForm = () => {
     event.preventDefault()
     const content = event.target.anecdote.value
     event.target.anecdote.value = ''
-    newAnecdoteMutation.mutate({content, id: generateId(), votes: 0})
-    dispatch({type:'CREATE', payload: content})
-    setTimeout(() => {
-      dispatch({type: 'HIDE'})
-    }, 5000) 
+    newAnecdoteMutation.mutate(
+      {content, id: generateId(), votes: 0},
+      {
+        onSuccess: () => {
+          dispatch({type:'CREATE', payload: content})
+          setTimeout(() => {
+            dispatch({type: 'HIDE'})
+          }, 5000) 
+        },
+        onError: (err) =>{
+          if(content.length < 5){
+            dispatch({type: 'ERROR', payload: `too short anecdote, must have length 5 or more`})
+            setTimeout(() => {
+              dispatch({type: 'HIDE'})
+            }, 5000) 
+          }
+          else{
+          dispatch({type: 'ERROR', payload: `error: ${err}`})
+          setTimeout(() => {
+            dispatch({type: 'HIDE'})
+          }, 5000) 
+        }
+        }
+      }
+      )
+ 
   }
 
   return (
