@@ -1,12 +1,12 @@
-import { useState, useEffect, useRef } from 'react'
-import Blog from './components/Blog'
-import LoginForm from './components/LoginForm'
-import BlogForm from './components/BlogForm'
-import Notification from './components/Notification'
+import { useState, useEffect, useRef } from "react";
+import Blog from "./components/Blog";
+import LoginForm from "./components/LoginForm";
+import BlogForm from "./components/BlogForm";
+import Notification from "./components/Notification";
 
-import blogService from './services/blogs'
-import loginService from './services/login'
-import Togglable from './components/Togglable'
+import blogService from "./services/blogs";
+import loginService from "./services/login";
+import Togglable from "./components/Togglable";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -35,7 +35,6 @@ const App = () => {
       blogService.setToken(user.token);
     }
   }, []);
-
 
   const handleLogin = async (username, password) => {
     try {
@@ -86,7 +85,7 @@ const App = () => {
   const removeBlog = async (blogId) => {
     try {
       await blogService.remove(blogId);
-      const updatedBlogs = blogs.filter(blog => blog.id !== blogId);
+      const updatedBlogs = blogs.filter((blog) => blog.id !== blogId);
       setBlogs(updatedBlogs);
       setMessage("Blog removed");
     } catch (exception) {
@@ -115,15 +114,22 @@ const App = () => {
           <Togglable buttonLabel="new blog" ref={blogFormRef}>
             <BlogForm createBlog={createBlog} />
           </Togglable>
-<div className='blogs'>
-          {blogs.sort((a, b) => b.likes - a.likes).map(blog =>
-            <Blog key={blog.id} blog={blog} updateLikes={updateLikes} removeBlog={removeBlog} />
-          )}
+          <div className="blogs">
+            {blogs
+              .sort((a, b) => b.likes - a.likes)
+              .map((blog) => (
+                <Blog
+                  key={blog.id}
+                  blog={blog}
+                  updateLikes={updateLikes}
+                  removeBlog={removeBlog}
+                />
+              ))}
           </div>
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;
