@@ -8,9 +8,15 @@ import blogService from "./services/blogs";
 import loginService from "./services/login";
 import Togglable from "./components/Togglable";
 
+//import { createBlog } from "../reducers/blogReducer";
+import { useSelector, useDispatch } from "react-redux";
+import { setNotification } from "./reducers/notificationReducer";
+
 const App = () => {
+  const dispatch = useDispatch();
+  //const blogs = useSelector(state => state);
   const [blogs, setBlogs] = useState([]);
-  const [message, setMessage] = useState(null);
+  //const [message, setMessage] = useState(null);
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -18,14 +24,14 @@ const App = () => {
   }, []);
 
   // Clear notification after 5 seconds
-  useEffect(() => {
+  /*  useEffect(() => {
     const timer = setTimeout(() => {
       setMessage(null);
     }, 5000);
     return () => {
       clearTimeout(timer);
     };
-  }, [message]);
+  }, [message]); */
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser");
@@ -45,14 +51,17 @@ const App = () => {
       window.localStorage.setItem("loggedBlogappUser", JSON.stringify(user));
       blogService.setToken(user.token);
       setUser(user);
+      dispatch(setNotification(`${user.name} successfully logged in!`, 5));
     } catch (exception) {
-      setMessage("error: Wrong credentials");
+      dispatch(setNotification(`error: Wrong credentials`, 5));
+      //setMessage("error: Wrong credentials");
     }
   };
 
   const handleLogout = () => {
     window.localStorage.clear();
     setUser(null);
+    dispatch(setNotification(`${user.name} has been logged out!`, 5));
   };
 
   const createBlog = async (title, author, url) => {
@@ -64,9 +73,11 @@ const App = () => {
         url,
       });
       setBlogs(blogs.concat(blog));
-      setMessage(`A new blog ${title} by ${author} added`);
+      dispatch(setNotification(`A new blog ${title} by ${author} added`, 5));
+      //setMessage(`A new blog ${title} by ${author} added`);
     } catch (exception) {
-      setMessage("error " + exception.response.data.error);
+      dispatch(setNotification(`error ${exception.response.data.error}`, 5));
+      //setMessage("error " + exception.response.data.error);
     }
   };
 
@@ -78,18 +89,31 @@ const App = () => {
         blogs.map((blog) => (blog.id === response.id ? response : blog))
       );
     } catch (exception) {
-      setMessage("error" + exception.response.data.error);
+      dispatch(setNotification(`error ${exception.response.data.error}`, 5));
+      //setMessage("error" + exception.response.data.error);
     }
   };
 
   const removeBlog = async (blogId) => {
     try {
+      console.log(blogId);
+      const blogToRemove = blogs.filter((blog) => blog.id === blogId);
+      const blogToRemoveAuthor = blogToRemove[0].author;
+      const blogToRemoveTitle = blogToRemove[0].title;
+      console.log(blogToRemove);
       await blogService.remove(blogId);
       const updatedBlogs = blogs.filter((blog) => blog.id !== blogId);
       setBlogs(updatedBlogs);
-      setMessage("Blog removed");
+      dispatch(
+        setNotification(
+          `${blogToRemoveTitle} by ${blogToRemoveAuthor} removed`,
+          5
+        )
+      );
+      //  setMessage("Blog removed");
     } catch (exception) {
-      setMessage("error" + exception.response.data.error);
+      dispatch(setNotification(`error ${exception.response.data.error}`, 5));
+      // setMessage("error" + exception.response.data.error);
     }
   };
 
@@ -98,7 +122,7 @@ const App = () => {
   return (
     <div>
       <h1 className="header-title">Blogs</h1>
-      <Notification message={message} />
+      <Notification />
       {user === null ? (
         <Togglable buttonLabel="login">
           <LoginForm handleLogin={handleLogin} />
