@@ -11,27 +11,21 @@ import Togglable from "./components/Togglable";
 //import { createBlog } from "../reducers/blogReducer";
 import { useSelector, useDispatch } from "react-redux";
 import { setNotification } from "./reducers/notificationReducer";
+import { initializeBlogs } from "./reducers/blogReducer";
 
 const App = () => {
+  const blogFormRef = useRef();
   const dispatch = useDispatch();
   //const blogs = useSelector(state => state);
   const [blogs, setBlogs] = useState([]);
-  //const [message, setMessage] = useState(null);
   const [user, setUser] = useState(null);
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
   }, []);
-
-  // Clear notification after 5 seconds
-  /*  useEffect(() => {
-    const timer = setTimeout(() => {
-      setMessage(null);
-    }, 5000);
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [message]); */
+  /*   useEffect(() => {
+    dispatch(initializeBlogs());
+  }, []); */
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser");
@@ -54,7 +48,6 @@ const App = () => {
       dispatch(setNotification(`${user.name} successfully logged in!`, 5));
     } catch (exception) {
       dispatch(setNotification(`error: Wrong credentials`, 5));
-      //setMessage("error: Wrong credentials");
     }
   };
 
@@ -64,7 +57,7 @@ const App = () => {
     dispatch(setNotification(`${user.name} has been logged out!`, 5));
   };
 
-  const createBlog = async (title, author, url) => {
+  /*   const createBlog = async (title, author, url) => {
     try {
       blogFormRef.current.toggleVisibility();
       const blog = await blogService.create({
@@ -74,12 +67,10 @@ const App = () => {
       });
       setBlogs(blogs.concat(blog));
       dispatch(setNotification(`A new blog ${title} by ${author} added`, 5));
-      //setMessage(`A new blog ${title} by ${author} added`);
     } catch (exception) {
       dispatch(setNotification(`error ${exception.response.data.error}`, 5));
-      //setMessage("error " + exception.response.data.error);
     }
-  };
+  }; */
 
   const updateLikes = async (id, updatedBlog) => {
     try {
@@ -90,7 +81,6 @@ const App = () => {
       );
     } catch (exception) {
       dispatch(setNotification(`error ${exception.response.data.error}`, 5));
-      //setMessage("error" + exception.response.data.error);
     }
   };
 
@@ -110,14 +100,10 @@ const App = () => {
           5
         )
       );
-      //  setMessage("Blog removed");
     } catch (exception) {
       dispatch(setNotification(`error ${exception.response.data.error}`, 5));
-      // setMessage("error" + exception.response.data.error);
     }
   };
-
-  const blogFormRef = useRef();
 
   return (
     <div>
@@ -136,7 +122,7 @@ const App = () => {
             </button>
           </p>
           <Togglable buttonLabel="new blog" ref={blogFormRef}>
-            <BlogForm createBlog={createBlog} />
+            <BlogForm togglableRef={blogFormRef} />
           </Togglable>
           <div className="blogs">
             {blogs

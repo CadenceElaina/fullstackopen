@@ -1,17 +1,37 @@
-import { useState } from "react";
+//import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { createBlog } from "../reducers/blogReducer";
+import blogService from "../services/blogs";
 
-const BlogForm = ({ createBlog }) => {
-  const [newBlog, setNewBlog] = useState({ title: "", author: "", url: "" });
+const BlogForm = ({ togglableRef }) => {
+  const dispatch = useDispatch();
 
-  const handleInputChange = (event) => {
+  //const [newBlog, setNewBlog] = useState({ title: "", author: "", url: "" });
+
+  /*   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setNewBlog({ ...newBlog, [name]: value });
-  };
+  }; */
 
-  const handleCreateBlog = (event) => {
+  const handleCreateBlog = async (event) => {
     event.preventDefault();
-    createBlog(newBlog.title, newBlog.author, newBlog.url);
-    setNewBlog({ title: "", author: "", url: "" });
+    const title = event.target.title.value;
+    const author = event.target.author.value;
+    const url = event.target.url.value;
+    event.target.title.value = "";
+    event.target.author.value = "";
+    event.target.url.value = "";
+    console.log(title, author, url);
+    //createBlog(newBlog.title, newBlog.author, newBlog.url);
+    const newBlog = {
+      title,
+      author,
+      url,
+    };
+    console.log(newBlog);
+    //const newBlog = await blogService.create({ title, author, url });
+    dispatch(createBlog(newBlog));
+    //setNewBlog({ title: "", author: "", url: "" });
   };
 
   return (
@@ -23,8 +43,8 @@ const BlogForm = ({ createBlog }) => {
           <input
             name="title"
             type="text"
-            value={newBlog.title}
-            onChange={handleInputChange}
+            //value={newBlog.title}
+            //onChange={handleInputChange}
           />
         </div>
         <div>
@@ -32,8 +52,8 @@ const BlogForm = ({ createBlog }) => {
           <input
             name="author"
             type="text"
-            value={newBlog.author}
-            onChange={handleInputChange}
+            //value={newBlog.author}
+            //onChange={handleInputChange}
           />
         </div>
         <div>
@@ -41,8 +61,8 @@ const BlogForm = ({ createBlog }) => {
           <input
             name="url"
             type="text"
-            value={newBlog.url}
-            onChange={handleInputChange}
+            //value={newBlog.url}
+            // onChange={handleInputChange}
           />
         </div>
         <button id="create-blog-btn" className="create-blog" type="submit">
