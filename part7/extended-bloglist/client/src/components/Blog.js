@@ -1,5 +1,9 @@
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { likeBlog, deleteBlog } from "../reducers/blogReducer";
+
 const Blog = ({ blog, updateLikes, removeBlog }) => {
+  const dispatch = useDispatch();
   const [visible, setVisible] = useState(false);
 
   //const hideWhenVisible = { display: visible ? 'none' : '' };
@@ -10,21 +14,16 @@ const Blog = ({ blog, updateLikes, removeBlog }) => {
   };
 
   const handleLike = () => {
-    const updatedBlog = {
-      title: blog.title,
-      author: blog.author,
-      url: blog.url,
-      likes: blog.likes + 1,
-      user: blog.user.id,
-    };
-    updateLikes(blog.id, updatedBlog);
+    const likedBlog = { ...blog, likes: blog.likes + 1, user: blog.user.id };
+    dispatch(likeBlog(blog.id, likedBlog));
   };
 
-  const handleRemove = () => {
-    if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
-      removeBlog(blog.id);
+  const handleDelete = () => {
+    if (window.confirm(`Delete blog ${blog.title} by ${blog.author}?`)) {
+      dispatch(deleteBlog(blog));
     }
   };
+
   return (
     <div className="blog">
       <div className="blog-title">
@@ -45,7 +44,7 @@ const Blog = ({ blog, updateLikes, removeBlog }) => {
         <a href={`${blog.url}`} target="_blank" rel="noreferrer">
           {blog.url}
         </a>
-        <button className="remove-button" onClick={handleRemove}>
+        <button className="remove-button" onClick={handleDelete}>
           remove
         </button>
       </div>

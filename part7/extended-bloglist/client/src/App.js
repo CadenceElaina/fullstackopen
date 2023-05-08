@@ -17,15 +17,19 @@ const App = () => {
   const blogFormRef = useRef();
   const dispatch = useDispatch();
   //const blogs = useSelector(state => state);
-  const [blogs, setBlogs] = useState([]);
+  //const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState(null);
 
-  useEffect(() => {
+  /* useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
-  }, []);
-  /*   useEffect(() => {
-    dispatch(initializeBlogs());
   }, []); */
+
+  useEffect(() => {
+    dispatch(initializeBlogs());
+  }, [dispatch]);
+
+  const blogs = useSelector((state) => state.blogs);
+  console.log(blogs);
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser");
@@ -72,7 +76,7 @@ const App = () => {
     }
   }; */
 
-  const updateLikes = async (id, updatedBlog) => {
+  /*   const updateLikes = async (id, updatedBlog) => {
     try {
       const response = await blogService.update(id, updatedBlog);
 
@@ -82,9 +86,9 @@ const App = () => {
     } catch (exception) {
       dispatch(setNotification(`error ${exception.response.data.error}`, 5));
     }
-  };
+  }; */
 
-  const removeBlog = async (blogId) => {
+  /*   const removeBlog = async (blogId) => {
     try {
       console.log(blogId);
       const blogToRemove = blogs.filter((blog) => blog.id === blogId);
@@ -104,7 +108,7 @@ const App = () => {
       dispatch(setNotification(`error ${exception.response.data.error}`, 5));
     }
   };
-
+ */
   return (
     <div>
       <h1 className="header-title">Blogs</h1>
@@ -125,15 +129,10 @@ const App = () => {
             <BlogForm togglableRef={blogFormRef} />
           </Togglable>
           <div className="blogs">
-            {blogs
+            {[...blogs]
               .sort((a, b) => b.likes - a.likes)
               .map((blog) => (
-                <Blog
-                  key={blog.id}
-                  blog={blog}
-                  updateLikes={updateLikes}
-                  removeBlog={removeBlog}
-                />
+                <Blog key={blog.id} blog={blog} />
               ))}
           </div>
         </div>

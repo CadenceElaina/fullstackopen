@@ -12,6 +12,15 @@ const blogSlice = createSlice({
     setBlogs(state, action) {
       return action.payload;
     },
+    updateBlog(state, action) {
+      const updatedBlog = action.payload;
+      const { id } = updatedBlog;
+      return state.map((blog) => (blog.id !== id ? blog : updatedBlog));
+    },
+    removeBlog(state, action) {
+      const removedBlog = action.payload;
+      return state.filter((blog) => blog.id !== removedBlog);
+    },
   },
 });
 
@@ -34,20 +43,33 @@ export const createBlog = (blog) => {
       dispatch(setNotification(`error ${error.response.data.error}`, 5));
     }
   };
-  /*  try {
-    blogFormRef.current.toggleVisibility();
-    const blog = await blogService.create({
-      title,
-      author,
-      url,
-    });
-    setBlogs(blogs.concat(blog));
-    dispatch(setNotification(`A new blog ${title} by ${author} added`, 5));
-  } catch (exception) {
-    dispatch(setNotification(`error ${exception.response.data.error}`, 5));
-  } */
 };
 
-export const { appendBlog, setBlogs } = blogSlice.actions;
+export const likeBlog = (id, blog) => {
+  return async (dispatch) => {
+    try {
+      const likedBlog = await blogService.update(id, blog);
+      dispatch(updateBlog(likedBlog));
+      dispatch(setNotification(`${blog.title} liked!`, 5));
+    } catch (error) {
+      dispatch(setNotification(`error ${error.response.data.error}`, 5));
+    }
+  };
+};
 
-export default blogSlice;
+export const deleteBlog = (id, blog) => {
+  return async (dispatch) => {
+    try {
+      await blogService.remove(blog.id);
+      dispatch(removeBlog(blog.id));
+      dispatch(setNotification(`${blog.title} deleted!`, 5));
+    } catch (error) {
+      dispatch(setNotification(`error ${error.response.data.error}`, 5));
+    }
+  };
+};
+
+export const { appendBlog, setBlogs, updateBlog, removeBlog } =
+  blogSlice.actions;
+
+export default blogSlice.reducer;

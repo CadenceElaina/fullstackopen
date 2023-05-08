@@ -8,7 +8,6 @@ import { useSelector } from "react-redux";
   }
   return notification && <div style={style}>{notification}</div>
 }
-
 export default Notification */
 const Notification = () => {
   const notification = useSelector((state) => state.notification);
