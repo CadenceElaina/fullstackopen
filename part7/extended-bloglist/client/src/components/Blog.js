@@ -20,6 +20,7 @@ const Blog = ({ blog, updateLikes, removeBlog }) => {
 
   const handleDelete = () => {
     if (window.confirm(`Delete blog ${blog.title} by ${blog.author}?`)) {
+      console.log(blog);
       dispatch(deleteBlog(blog));
     }
   };
@@ -44,7 +45,7 @@ const Blog = ({ blog, updateLikes, removeBlog }) => {
         <a href={`${blog.url}`} target="_blank" rel="noreferrer">
           {blog.url}
         </a>
-        <button className="remove-button" onClick={handleDelete}>
+        <button className="remove-button" onClick={() => handleDelete(blog)}>
           remove
         </button>
       </div>

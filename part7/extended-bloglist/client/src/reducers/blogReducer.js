@@ -57,14 +57,14 @@ export const likeBlog = (id, blog) => {
   };
 };
 
-export const deleteBlog = (id, blog) => {
+export const deleteBlog = (blog) => {
   return async (dispatch) => {
     try {
       await blogService.remove(blog.id);
       dispatch(removeBlog(blog.id));
       dispatch(setNotification(`${blog.title} deleted!`, 5));
     } catch (error) {
-      dispatch(setNotification(`error ${error.response.data.error}`, 5));
+      dispatch(setNotification(`error ${error}`, 5));
     }
   };
 };
