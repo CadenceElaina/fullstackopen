@@ -1,4 +1,6 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
+import { useSelector, useDispatch } from "react-redux";
+
 import Blog from "./components/Blog";
 import LoginForm from "./components/LoginForm";
 import BlogForm from "./components/BlogForm";
@@ -9,29 +11,34 @@ import loginService from "./services/login";
 import Togglable from "./components/Togglable";
 
 //import { createBlog } from "../reducers/blogReducer";
-import { useSelector, useDispatch } from "react-redux";
+import { loggedUser, logUserOut } from "./reducers/loginReducer";
+import { initializeUsers } from "./reducers/userReducer";
 import { setNotification } from "./reducers/notificationReducer";
 import { initializeBlogs } from "./reducers/blogReducer";
 
 const App = () => {
   const blogFormRef = useRef();
   const dispatch = useDispatch();
-  //const blogs = useSelector(state => state);
-  //const [blogs, setBlogs] = useState([]);
-  const [user, setUser] = useState(null);
+  //const [user, setUser] = useState(null);
 
   /* useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
   }, []); */
 
   useEffect(() => {
+    console.log("useEffect runs");
+    dispatch(loggedUser());
+    dispatch(initializeUsers());
     dispatch(initializeBlogs());
   }, [dispatch]);
 
   const blogs = useSelector((state) => state.blogs);
+  const user = useSelector((state) => state.login);
+  console.log(user);
+  const users = useSelector((state) => state.users);
   console.log(blogs);
 
-  useEffect(() => {
+  /*   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser");
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON);
@@ -59,63 +66,19 @@ const App = () => {
     window.localStorage.clear();
     setUser(null);
     dispatch(setNotification(`${user.name} has been logged out!`, 5));
+  }; */
+  const handleLogout = () => {
+    dispatch(logUserOut());
+    dispatch(setNotification(`${user.name} has been logged out!`, 5));
   };
 
-  /*   const createBlog = async (title, author, url) => {
-    try {
-      blogFormRef.current.toggleVisibility();
-      const blog = await blogService.create({
-        title,
-        author,
-        url,
-      });
-      setBlogs(blogs.concat(blog));
-      dispatch(setNotification(`A new blog ${title} by ${author} added`, 5));
-    } catch (exception) {
-      dispatch(setNotification(`error ${exception.response.data.error}`, 5));
-    }
-  }; */
-
-  /*   const updateLikes = async (id, updatedBlog) => {
-    try {
-      const response = await blogService.update(id, updatedBlog);
-
-      setBlogs(
-        blogs.map((blog) => (blog.id === response.id ? response : blog))
-      );
-    } catch (exception) {
-      dispatch(setNotification(`error ${exception.response.data.error}`, 5));
-    }
-  }; */
-
-  /*   const removeBlog = async (blogId) => {
-    try {
-      console.log(blogId);
-      const blogToRemove = blogs.filter((blog) => blog.id === blogId);
-      const blogToRemoveAuthor = blogToRemove[0].author;
-      const blogToRemoveTitle = blogToRemove[0].title;
-      console.log(blogToRemove);
-      await blogService.remove(blogId);
-      const updatedBlogs = blogs.filter((blog) => blog.id !== blogId);
-      setBlogs(updatedBlogs);
-      dispatch(
-        setNotification(
-          `${blogToRemoveTitle} by ${blogToRemoveAuthor} removed`,
-          5
-        )
-      );
-    } catch (exception) {
-      dispatch(setNotification(`error ${exception.response.data.error}`, 5));
-    }
-  };
- */
   return (
     <div>
       <h1 className="header-title">Blogs</h1>
       <Notification />
       {user === null ? (
         <Togglable buttonLabel="login">
-          <LoginForm handleLogin={handleLogin} />
+          <LoginForm />
         </Togglable>
       ) : (
         <div>
