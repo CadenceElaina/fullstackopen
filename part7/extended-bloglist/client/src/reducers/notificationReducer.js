@@ -23,9 +23,6 @@ export const setNotification = (message, time) => {
       () => dispatch(hideNotification()),
       time * 1000
     );
-    /*  setTimeout(() => {
-      dispatch(hideNotification())
-    }, timeout * 1000) */
   };
 };
 

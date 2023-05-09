@@ -24,7 +24,6 @@ export const { setUser, login, logout } = loginSlice.actions;
 export const loggedUser = () => {
   return async (dispatch) => {
     const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser");
-    console.log(loggedUser);
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON);
       blogService.setToken(user.token);
@@ -46,7 +45,7 @@ export const logUserIn = (user) => {
       dispatch(login(user));
       dispatch(setNotification(`Welcome ${user.name}!`, 5));
     } catch (error) {
-      dispatch(setNotification(`error ${error.response.data.error}`, 5));
+      dispatch(setNotification(`error ${error}`, 5));
     }
   };
 };

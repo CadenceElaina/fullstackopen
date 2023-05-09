@@ -1,17 +1,17 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { logUserIn } from "../reducers/loginReducer";
-//import PropTypes from "prop-types";
+//import { useNavigate } from "react-router-dom";
 
 const LoginForm = ({ handleLogin }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const dispatch = useDispatch();
+  // const navigate = useNavigate();
 
   const onSubmit = (event) => {
     event.preventDefault();
-    //handleLogin(username, password);
     const user = {
       username,
       password,
@@ -19,6 +19,7 @@ const LoginForm = ({ handleLogin }) => {
     dispatch(logUserIn(user));
     setUsername("");
     setPassword("");
+    //navigate("/blogs");
   };
 
   return (
@@ -53,8 +54,4 @@ const LoginForm = ({ handleLogin }) => {
   );
 };
 
-/* LoginForm.propTypes = {
-  handleLogin: PropTypes.func.isRequired,
-};
- */
 export default LoginForm;

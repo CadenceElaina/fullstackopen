@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { likeBlog, deleteBlog } from "../reducers/blogReducer";
+//import { useNavigate } from "react-router-dom";
 
-const Blog = ({ blog, updateLikes, removeBlog }) => {
+const Blog = ({ blog, user }) => {
   const dispatch = useDispatch();
+  //const navigate = useNavigate();
   const [visible, setVisible] = useState(false);
 
   //const hideWhenVisible = { display: visible ? 'none' : '' };
@@ -20,8 +22,9 @@ const Blog = ({ blog, updateLikes, removeBlog }) => {
 
   const handleDelete = () => {
     if (window.confirm(`Delete blog ${blog.title} by ${blog.author}?`)) {
-      console.log(blog);
+      //console.log(blog);
       dispatch(deleteBlog(blog));
+      //  navigate("/blogs");
     }
   };
 
