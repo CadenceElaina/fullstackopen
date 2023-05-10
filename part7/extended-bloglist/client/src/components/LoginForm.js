@@ -1,14 +1,15 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { logUserIn } from "../reducers/loginReducer";
-//import { useNavigate } from "react-router-dom";
+import { TextField, Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 const LoginForm = ({ handleLogin }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const dispatch = useDispatch();
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const onSubmit = (event) => {
     event.preventDefault();
@@ -19,7 +20,7 @@ const LoginForm = ({ handleLogin }) => {
     dispatch(logUserIn(user));
     setUsername("");
     setPassword("");
-    //navigate("/blogs");
+    navigate("/blogs");
   };
 
   return (
@@ -27,8 +28,8 @@ const LoginForm = ({ handleLogin }) => {
       <h2>Log in to application</h2>
       <form onSubmit={onSubmit}>
         <div>
-          username
-          <input
+          <TextField
+            label="username"
             id="username"
             type="text"
             value={username}
@@ -37,8 +38,8 @@ const LoginForm = ({ handleLogin }) => {
           />
         </div>
         <div>
-          password
-          <input
+          <TextField
+            label="password"
             id="password"
             type="password"
             value={password}
@@ -46,9 +47,9 @@ const LoginForm = ({ handleLogin }) => {
             onChange={({ target }) => setPassword(target.value)}
           />
         </div>
-        <button id="login-button" type="submit">
+        <Button variant="contained" color="primary" type="submit">
           login
-        </button>
+        </Button>
       </form>
     </div>
   );

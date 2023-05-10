@@ -1,6 +1,7 @@
 //import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { createBlog } from "../reducers/blogReducer";
+import { TextField, Button } from "@mui/material";
 
 const BlogForm = () => {
   const dispatch = useDispatch();
@@ -27,20 +28,25 @@ const BlogForm = () => {
       <h2>Create new blog</h2>
       <form onSubmit={handleCreateBlog}>
         <div>
-          title
-          <input name="title" type="text" />
+          <TextField label="title" type="text" name="title" />
+          {/*   <input name="title" type="text" /> */}
         </div>
         <div>
-          author
-          <input name="author" type="text" />
+          <TextField label="author" type="text" name="author" />
         </div>
         <div>
-          url
-          <input name="url" type="text" />
+          <TextField label="url" type="text" name="url" />
         </div>
-        <button id="create-blog-btn" className="create-blog" type="submit">
+        <Button
+          id="create-blog-btn"
+          className="create-blog"
+          variant="contained"
+          color="primary"
+          size="small"
+          type="submit"
+        >
           create
-        </button>
+        </Button>
       </form>
     </div>
   );
