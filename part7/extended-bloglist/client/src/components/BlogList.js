@@ -4,7 +4,6 @@ import { initializeBlogs } from "../reducers/blogReducer";
 
 import Togglable from "./Togglable";
 import BlogForm from "./BlogForm";
-import Blog from "./Blog";
 import { Link } from "react-router-dom";
 
 const BlogList = () => {

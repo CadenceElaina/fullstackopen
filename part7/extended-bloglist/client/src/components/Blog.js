@@ -2,12 +2,13 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { likeBlog, deleteBlog } from "../reducers/blogReducer";
 import { useNavigate } from "react-router-dom";
+import Comments from "./Comments";
 
 const Blog = ({ blog, user }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   /*  const [visible, setVisible] = useState(false); */
-  console.log(blog);
+  //console.log(blog);
   //const hideWhenVisible = { display: visible ? 'none' : '' };
   /* const showWhenVisible = { display: visible ? "" : "none" }; */
 
@@ -52,6 +53,7 @@ const Blog = ({ blog, user }) => {
           remove
         </button>
       </div>
+      <Comments blog={blog} />
     </div>
   );
 };

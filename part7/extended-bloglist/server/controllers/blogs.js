@@ -44,6 +44,19 @@ blogsRouter.post("/", async (request, response) => {
   response.status(201).json(savedBlog.toJSON());
 });
 
+blogsRouter.post("/:id/comments", async (request, response) => {
+  const { comment } = request.body;
+  const blog = await Blog.findById(request.params.id);
+
+  blog.comments = blog.comments.concat(comment);
+
+  const updatedBlog = await blog.save();
+
+  updatedBlog
+    ? response.status(200).json(updatedBlog.toJSON())
+    : response.status(404).end();
+});
+
 blogsRouter.delete("/:id", async (request, response) => {
   const token = request.token;
   const decodedToken = jwt.verify(token, config.SECRET);

@@ -39,8 +39,8 @@ export const createBlog = (blog) => {
       dispatch(appendBlog(newBlog));
       dispatch(setNotification(`${blog.title} by ${blog.author} added`, 5));
     } catch (error) {
-      console.log(error.response.data.error);
-      dispatch(setNotification(`error ${error.response.data.error}`, 5));
+      //console.log(error.response.data.error);
+      dispatch(setNotification(`error ${error}`, 5));
     }
   };
 };
@@ -48,11 +48,23 @@ export const createBlog = (blog) => {
 export const likeBlog = (id, blog) => {
   return async (dispatch) => {
     try {
-      const likedBlog = await blogService.update(id, blog);
+      const likedBlog = await blogService.addLike(id, blog);
       dispatch(updateBlog(likedBlog));
       dispatch(setNotification(`${blog.title} liked!`, 5));
     } catch (error) {
-      dispatch(setNotification(`error ${error.response.data.error}`, 5));
+      dispatch(setNotification(`error ${error}`, 5));
+    }
+  };
+};
+
+export const createComment = (id, blog) => {
+  return async (dispatch) => {
+    try {
+      const commentedBlog = await blogService.addComment(id, blog);
+      dispatch(updateBlog(commentedBlog));
+      dispatch(setNotification(`comment added!`, 5));
+    } catch (error) {
+      dispatch(setNotification(`error ${error}`, 5));
     }
   };
 };
