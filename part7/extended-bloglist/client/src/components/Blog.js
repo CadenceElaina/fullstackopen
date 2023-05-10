@@ -1,20 +1,20 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { likeBlog, deleteBlog } from "../reducers/blogReducer";
-//import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Blog = ({ blog, user }) => {
   const dispatch = useDispatch();
-  //const navigate = useNavigate();
-  const [visible, setVisible] = useState(false);
-
+  const navigate = useNavigate();
+  /*  const [visible, setVisible] = useState(false); */
+  console.log(blog);
   //const hideWhenVisible = { display: visible ? 'none' : '' };
-  const showWhenVisible = { display: visible ? "" : "none" };
+  /* const showWhenVisible = { display: visible ? "" : "none" }; */
 
-  const toggleVisibility = () => {
+  /*  const toggleVisibility = () => {
     setVisible(!visible);
   };
-
+ */
   const handleLike = () => {
     const likedBlog = { ...blog, likes: blog.likes + 1, user: blog.user.id };
     dispatch(likeBlog(blog.id, likedBlog));
@@ -24,7 +24,7 @@ const Blog = ({ blog, user }) => {
     if (window.confirm(`Delete blog ${blog.title} by ${blog.author}?`)) {
       //console.log(blog);
       dispatch(deleteBlog(blog));
-      //  navigate("/blogs");
+      navigate("/blogs");
     }
   };
 
@@ -33,11 +33,11 @@ const Blog = ({ blog, user }) => {
       <div className="blog-title">
         <span className="title">{blog.title} - </span>
         <span className="author">{blog.author}</span>{" "}
-        <button onClick={toggleVisibility} className="toggle-button">
+        {/*   <button onClick={toggleVisibility} className="toggle-button">
           {visible ? "hide" : "show"}
-        </button>
+        </button> */}
       </div>
-      <div style={showWhenVisible} className="blog-details">
+      <div /* style={showWhenVisible} */ className="blog-details">
         <p>
           Likes: <span className="blog-likes">{blog.likes}</span>{" "}
           <button onClick={handleLike} className="like-button">
