@@ -28,9 +28,11 @@ const BlogList = () => {
 
   return (
     <div className="blogs">
-      <Togglable buttonLabel="new blog" ref={blogFormRef}>
-        <BlogForm />
-      </Togglable>
+      <div id="new-blog-btn">
+        <Togglable buttonLabel="new blog" ref={blogFormRef}>
+          <BlogForm />
+        </Togglable>
+      </div>
       <TableContainer id="bloglist" component={Paper}>
         <Table>
           <TableBody>

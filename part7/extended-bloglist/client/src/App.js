@@ -59,7 +59,6 @@ const App = () => {
               <Route path="/blogs" element={<BlogList blogs={blogs} />} />
               <Route path="/users" element={<Users />} />
               <Route path="/users/:id" element={<User />} />
-              {/*  <Route path="/" element={<Home />} /> */}
             </Routes>
           </div>
         )}

@@ -6,10 +6,20 @@ const Notification = () => {
   if (notification === null) return null;
 
   if (notification && notification.includes("error")) {
-    return <Alert severity="error">{notification.substring(6)}</Alert>;
+    return (
+      <Alert severity="error" className="notification">
+        {notification.substring(6)}
+      </Alert>
+    );
   }
 
-  return notification && <Alert severity="success">{notification}</Alert>;
+  return (
+    notification && (
+      <Alert severity="success" className="notification">
+        {notification}
+      </Alert>
+    )
+  );
 };
 
 export default Notification;

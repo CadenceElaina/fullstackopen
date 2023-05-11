@@ -34,10 +34,10 @@ const Blog = () => {
 
   return (
     <div className="blog">
-      <div className="blog-title">
+      <h2 className="blog-title">
         <span className="title">{blog.title} - </span>
-        <span className="author">{blog.author}</span>{" "}
-      </div>
+        <span className="author">{blog.author}</span>
+      </h2>
       <div className="blog-details">
         <div>
           Url:{" "}

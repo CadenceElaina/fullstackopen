@@ -25,12 +25,24 @@ body {
 .success {
   color: green;
 }
-
+#new-blog-btn {
+  background-color: #fff;
+  border: 1px solid black;
+  border-radius: 5px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 1rem;
+}
 .blog {
-  background-color: #999;
+  background-color: #fff;
+  color: black;
   margin: 0 auto;
   border: 1px solid black;
 }
+/* .notification {
+  margin-top: 10px;
+  margin-bottom: 10px;
+} */
 
 .blog-title {
   font-size: 1.2rem;
@@ -39,8 +51,8 @@ body {
   font-size: 1.2rem !important;
 }
 .user {
-  background-color: #888;
-  border: 1px solid #fff;
+  background-color: #fff;
+  border: 1px solid black;
 }
 .blog-details {
   padding: 1rem;

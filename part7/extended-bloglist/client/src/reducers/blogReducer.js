@@ -60,7 +60,9 @@ export const likeBlog = (id, blog) => {
 export const createComment = (id, blog) => {
   return async (dispatch) => {
     try {
-      const commentedBlog = await blogService.addComment(id, blog);
+      const comment = blog.value;
+      console.log(blog, comment);
+      const commentedBlog = await blogService.addComment(id, comment);
       dispatch(updateBlog(commentedBlog));
       dispatch(setNotification(`comment added!`, 5));
     } catch (error) {

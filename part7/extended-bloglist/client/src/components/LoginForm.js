@@ -1,12 +1,34 @@
-import { useState } from "react";
+import * as React from "react";
 import { useDispatch } from "react-redux";
 import { logUserIn } from "../reducers/loginReducer";
-import { TextField, Button } from "@mui/material";
+import Box from "@mui/material/Box";
+import IconButton from "@mui/material/IconButton";
+import Input from "@mui/material/Input";
+import FilledInput from "@mui/material/FilledInput";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import InputLabel from "@mui/material/InputLabel";
+import InputAdornment from "@mui/material/InputAdornment";
+import FormHelperText from "@mui/material/FormHelperText";
+import FormControl from "@mui/material/FormControl";
+import TextField from "@mui/material/TextField";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { Button } from "@mui/material";
+
 import { useNavigate } from "react-router-dom";
+import { useField } from "../hooks";
 
 const LoginForm = ({ handleLogin }) => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = React.useState(false);
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
+  const { reset: resetUsername, ...username } = useField("text");
+  const { reset: resetPassword, ...password } = useField("text");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -14,12 +36,12 @@ const LoginForm = ({ handleLogin }) => {
   const onSubmit = (event) => {
     event.preventDefault();
     const user = {
-      username,
-      password,
+      username: username.value,
+      password: password.value,
     };
     dispatch(logUserIn(user));
-    setUsername("");
-    setPassword("");
+    resetUsername();
+    resetPassword();
     navigate("/blogs");
   };
 
@@ -28,25 +50,39 @@ const LoginForm = ({ handleLogin }) => {
       <h2>Log in to application</h2>
       <form onSubmit={onSubmit}>
         <div>
-          <TextField
-            label="username"
-            id="username"
-            type="text"
-            value={username}
-            name="Username"
-            onChange={({ target }) => setUsername(target.value)}
-          />
+          <FormControl sx={{ m: 1, width: "25ch" }} variant="standard">
+            <TextField
+              id="username"
+              variant="standard"
+              label="username"
+              {...username}
+            />
+          </FormControl>
         </div>
         <div>
-          <TextField
-            label="password"
-            id="password"
-            type="password"
-            value={password}
-            name="Password"
-            onChange={({ target }) => setPassword(target.value)}
-          />
+          <FormControl sx={{ m: 1, width: "25ch" }} variant="standard">
+            <InputLabel htmlFor="standard-adornment-password">
+              Password
+            </InputLabel>
+            <Input
+              id="standard-adornment-password"
+              type={showPassword ? "text" : "password"}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              }
+              {...password}
+            />
+          </FormControl>
         </div>
+
         <Button variant="contained" color="primary" type="submit">
           login
         </Button>

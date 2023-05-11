@@ -28,6 +28,10 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const id = useSelector((state) => state.login);
+  const username = id.username;
+  const user = useSelector((state) => state.users.find((u) => u.id === id));
+
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -45,11 +49,10 @@ const Navbar = () => {
 
   const handleLogout = () => {
     dispatch(logUserOut());
-    // dispatch(setNotification(`${user.name} has been logged out!`, 5));
+    dispatch(setNotification(`${username} has been logged out!`, 5));
     navigate("/login");
   };
   return (
-    /*     <div> */
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>

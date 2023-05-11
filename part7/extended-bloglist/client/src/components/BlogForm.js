@@ -1,25 +1,27 @@
 //import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { createBlog } from "../reducers/blogReducer";
+import { useField } from "../hooks/index";
 import { TextField, Button } from "@mui/material";
 
 const BlogForm = () => {
   const dispatch = useDispatch();
+  const { reset: resetTitle, ...title } = useField("text");
+  const { reset: resetAuthor, ...author } = useField("text");
+  const { reset: resetUrl, ...url } = useField("text");
 
   const handleCreateBlog = async (event) => {
     event.preventDefault();
-    const title = event.target.title.value;
-    const author = event.target.author.value;
-    const url = event.target.url.value;
-    event.target.title.value = "";
-    event.target.author.value = "";
-    event.target.url.value = "";
-
     const newBlog = {
-      title,
-      author,
-      url,
+      title: title.value,
+      author: author.value,
+      url: url.value,
     };
+
+    resetTitle();
+    resetAuthor();
+    resetUrl();
+
     dispatch(createBlog(newBlog));
   };
 
@@ -28,14 +30,13 @@ const BlogForm = () => {
       <h2>Create new blog</h2>
       <form onSubmit={handleCreateBlog}>
         <div>
-          <TextField label="title" type="text" name="title" />
-          {/*   <input name="title" type="text" /> */}
+          <TextField label="title" {...title} />
         </div>
         <div>
-          <TextField label="author" type="text" name="author" />
+          <TextField label="author" {...author} />
         </div>
         <div>
-          <TextField label="url" type="text" name="url" />
+          <TextField label="url" {...url} />
         </div>
         <Button
           id="create-blog-btn"
