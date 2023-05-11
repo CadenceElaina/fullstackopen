@@ -40,7 +40,7 @@ const App = () => {
   const blogId = match
     ? blogs.find((blog) => blog.id === match.params.id)
     : null;
-
+  /*   console.log(blogId); */
   return (
     <Container>
       <div>
@@ -52,16 +52,15 @@ const App = () => {
           </Togglable>
         ) : (
           <div>
-            <div>
-              <Navbar />
-              <Routes>
-                <Route path="/blogs/:id" element={<Blog blog={blogId} />} />
-                <Route path="/blogs" element={<BlogList blogs={blogs} />} />
-                <Route path="/users" element={<Users />} />
-                <Route path="/users/:id" element={<User />} />
-                {/*  <Route path="/" element={<Home />} /> */}
-              </Routes>
-            </div>
+            <Navbar />
+            <Routes>
+              <Route path="/" element={<BlogList />} />
+              <Route path="/blogs/:id" element={<Blog />} />
+              <Route path="/blogs" element={<BlogList blogs={blogs} />} />
+              <Route path="/users" element={<Users />} />
+              <Route path="/users/:id" element={<User />} />
+              {/*  <Route path="/" element={<Home />} /> */}
+            </Routes>
           </div>
         )}
       </div>

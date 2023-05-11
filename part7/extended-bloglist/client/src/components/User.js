@@ -11,9 +11,9 @@ const User = () => {
 
   return (
     <div>
-      <h2>{user.name}</h2>
+      <h2>{user.name}'s blogs</h2>
       {user.blogs.length > 0 ? (
-        <div>
+        <div className="user">
           <ul>
             {user.blogs.map((blog) => (
               <Link to={`/blogs/${blog.id}`}>

@@ -48,7 +48,7 @@ export const createBlog = (blog) => {
 export const likeBlog = (id, blog) => {
   return async (dispatch) => {
     try {
-      const likedBlog = await blogService.addLike(id, blog);
+      const likedBlog = await blogService.likeBlog(id, blog);
       dispatch(updateBlog(likedBlog));
       dispatch(setNotification(`${blog.title} liked!`, 5));
     } catch (error) {

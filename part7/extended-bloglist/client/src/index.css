@@ -3,14 +3,10 @@
 * {
   font-family: "Noto Sans", sans-serif;
 }
-body {
+/* body {
   background-color: #333;
   color: white;
-}
-.Button {
-  margin: 1rem;
-  padding: 1rem;
-}
+} */
 .error,
 .success {
   background: lightgrey;
@@ -35,6 +31,17 @@ body {
   margin: 0 auto;
   border: 1px solid black;
 }
+
 .blog-title {
   font-size: 1.2rem;
+}
+.table-header {
+  font-size: 1.2rem !important;
+}
+.user {
+  background-color: #888;
+  border: 1px solid #fff;
+}
+.blog-details {
+  padding: 1rem;
 }

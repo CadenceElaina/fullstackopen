@@ -1,29 +1,45 @@
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import {
+  Table,
+  TableHead,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  Paper,
+} from "@mui/material";
+
 const Users = () => {
   const users = useSelector((state) => state.users);
 
   return (
     <div>
       <h2>Users</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Blogs Created</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((user) => (
-            <tr key={user.id}>
-              <td>
-                <Link to={`/users/${user.id}`}>{user.name}</Link>
-              </td>
-              <td>{user.blogs.length}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <TableContainer sx={{ minWidth: 250 }} component={Paper}>
+        <Table size="small">
+          <TableHead>
+            <TableRow>
+              <TableCell className="table-header">
+                <strong>Name</strong>
+              </TableCell>
+              <TableCell align="right" className="table-header">
+                <strong>blogs created</strong>
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {users.map((user) => (
+              <TableRow key={user.id}>
+                <TableCell>
+                  <Link to={`/users/${user.id}`}>{user.username}</Link>
+                </TableCell>
+                <TableCell align="right">{user.blogs.length}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </div>
   );
 };

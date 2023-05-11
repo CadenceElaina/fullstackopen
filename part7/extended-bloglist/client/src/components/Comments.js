@@ -1,6 +1,7 @@
 import { createComment } from "../reducers/blogReducer";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
+import { Button, Grid, TextField } from "@mui/material";
 
 const Comments = ({ blog }) => {
   const dispatch = useDispatch();
@@ -19,16 +20,28 @@ const Comments = ({ blog }) => {
     <div>
       <h3>Comments</h3>
       <form onSubmit={onSubmit}>
-        <input
-          id="comment"
-          type="text"
-          value={comment}
-          name="comment"
-          onChange={({ target }) => setComment(target.value)}
-        ></input>
-        <button id="comment-button" type="submit">
-          Comment
-        </button>
+        <Grid container>
+          <Grid item>
+            <TextField
+              id="comment"
+              type="text"
+              value={comment}
+              name="comment"
+              size="small"
+              onChange={({ target }) => setComment(target.value)}
+            ></TextField>
+          </Grid>
+          <Grid item alignItems="stretch" style={{ display: "flex" }}>
+            <Button
+              id="comment-button"
+              variant="contained"
+              color="primary"
+              type="submit"
+            >
+              Comment
+            </Button>
+          </Grid>
+        </Grid>
       </form>
       {comments.length > 0 ? (
         <ul>

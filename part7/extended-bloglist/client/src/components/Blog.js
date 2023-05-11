@@ -1,23 +1,23 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { likeBlog, deleteBlog } from "../reducers/blogReducer";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Comments from "./Comments";
+import { Button } from "@mui/material";
 
-const Blog = ({ blog, user }) => {
+const Blog = () => {
+  const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  /*  const [visible, setVisible] = useState(false); */
-  //console.log(blog);
-  //const hideWhenVisible = { display: visible ? 'none' : '' };
-  /* const showWhenVisible = { display: visible ? "" : "none" }; */
 
-  /*  const toggleVisibility = () => {
-    setVisible(!visible);
-  };
- */
+  const blog = useSelector((state) =>
+    state.blogs.find((blog) => blog.id === id)
+  );
+  const user = useSelector((state) => state.login);
+
   const handleLike = () => {
     const likedBlog = { ...blog, likes: blog.likes + 1, user: blog.user.id };
+    console.log(likedBlog);
     dispatch(likeBlog(blog.id, likedBlog));
   };
 
@@ -28,30 +28,39 @@ const Blog = ({ blog, user }) => {
       navigate("/blogs");
     }
   };
+  //console.log(blog);
 
   return (
     <div className="blog">
       <div className="blog-title">
         <span className="title">{blog.title} - </span>
         <span className="author">{blog.author}</span>{" "}
-        {/*   <button onClick={toggleVisibility} className="toggle-button">
-          {visible ? "hide" : "show"}
-        </button> */}
       </div>
-      <div /* style={showWhenVisible} */ className="blog-details">
-        <p>
-          Likes: <span className="blog-likes">{blog.likes}</span>{" "}
-          <button onClick={handleLike} className="like-button">
-            like
-          </button>{" "}
-        </p>
-        Url:{" "}
-        <a href={`${blog.url}`} target="_blank" rel="noreferrer">
-          {blog.url}
-        </a>
-        <button className="remove-button" onClick={() => handleDelete(blog)}>
-          remove
-        </button>
+      <div className="blog-details">
+        <div>
+          Url:{" "}
+          <a href={`${blog.url}`} target="_blank" rel="noreferrer">
+            {blog.url}
+          </a>
+        </div>
+        Likes: <span className="blog-likes">{blog.likes}</span>{" "}
+        <Button
+          variant="contained"
+          color="primary"
+          size="small"
+          onClick={handleLike}
+          className="like-button"
+        >
+          like
+        </Button>{" "}
+        <Button
+          variant="contained"
+          color="error"
+          size="small"
+          onClick={handleDelete}
+        >
+          delete
+        </Button>
       </div>
       <Comments blog={blog} />
     </div>
