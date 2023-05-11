@@ -3,10 +3,10 @@
 * {
   font-family: "Noto Sans", sans-serif;
 }
-/* body {
+body {
   background-color: #333;
   color: white;
-} */
+}
 .error,
 .success {
   background: lightgrey;

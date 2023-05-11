@@ -15,6 +15,8 @@ const Blog = () => {
   );
   const user = useSelector((state) => state.login);
 
+  if (!blog) return null;
+
   const handleLike = () => {
     const likedBlog = { ...blog, likes: blog.likes + 1, user: blog.user.id };
     console.log(likedBlog);
