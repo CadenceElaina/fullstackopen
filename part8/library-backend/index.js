@@ -128,7 +128,7 @@ const resolvers = {
       if (args.author && args.genre) {
         return books.filter(
           (book) =>
-            books.author === args.author && book.genres.includes(args.genre)
+            book.author === args.author && book.genres.includes(args.genre)
         );
       }
       if (args.author) {
