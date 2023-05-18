@@ -1,0 +1,46 @@
+body {
+  background: #333;
+  color: white;
+}
+a {
+  color: #0033cc;
+}
+tr:hover {
+  background-color: white;
+  color: black;
+}
+td {
+  padding: 0.5rem;
+}
+.title {
+  text-align: center;
+}
+.container {
+  /*   border: 1px solid white;
+  border-radius: 10px; */
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  align-content: center;
+}
+.inner {
+  margin: 0 auto;
+}
+.nav-list {
+  border: 1px solid white;
+  border-radius: 10px;
+  background-color: #666;
+  width: 50%;
+  margin: 0 auto;
+  text-align: center;
+  font-size: 1.2rem;
+  padding: 0.5rem;
+}
+.nav-link {
+  padding: 1rem;
+}
+.nav-link:hover {
+  color: blue;
+}
