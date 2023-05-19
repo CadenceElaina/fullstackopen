@@ -1,6 +1,6 @@
 import { useQuery } from "@apollo/client";
 import { Route, Routes } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Authors from "./components/Authors";
 import Books from "./components/Books";
@@ -8,6 +8,17 @@ import NewBook from "./components/NewBook";
 import Nav from "./components/Nav";
 
 import { ALL_AUTHORS } from "./queries";
+
+const Notify = ({ errorMessage }) => {
+  if (!errorMessage) {
+    return null;
+  }
+  return (
+    <div className="container error" style={{ color: "red" }}>
+      {errorMessage}
+    </div>
+  );
+};
 
 const App = () => {
   const [errorMessage, setErrorMessage] = useState(null);
@@ -18,20 +29,28 @@ const App = () => {
     return <div>loading...</div>;
   }
 
+  const notify = (message) => {
+    setErrorMessage(message);
+    setTimeout(() => {
+      setErrorMessage(null);
+    }, 10000);
+  };
+
   return (
     <div>
       <h2 className="title">Welcome to the Library</h2>
       <Nav />
+      <Notify errorMessage={errorMessage} />
 
       <Routes>
         <Route
           path="/"
-          element={<Authors authors={result.data.allAuthors} />}
+          element={
+            <Authors authors={result.data.allAuthors} setError={notify} />
+          }
         />
         <Route path="/books" element={<Books />} />
-        <Route path="/NewBook" element={<NewBook />} />
-        {/*     <Route path="/users" element={<Users />} />
-        <Route path="/users/:id" element={<User />} /> */}
+        <Route path="/NewBook" element={<NewBook setError={notify} />} />
       </Routes>
     </div>
   );
