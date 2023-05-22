@@ -18,23 +18,26 @@ const Books = (props) => {
   return (
     <div className="container">
       <h2>books</h2>
-
-      <table>
-        <tbody>
-          <tr>
-            <th></th>
-            <th>author</th>
-            <th>published</th>
-          </tr>
-          {books.map((a) => (
-            <tr key={a.title}>
-              <td>{a.title}</td>
-              <td>{a.author}</td>
-              <td>{a.published}</td>
+      {books.length > 0 ? (
+        <table>
+          <tbody>
+            <tr>
+              <th></th>
+              <th>author</th>
+              <th>published</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+            {books.map((a) => (
+              <tr key={a.title}>
+                <td>{a.title}</td>
+                <td>{a.author.name}</td>
+                <td>{a.published}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <>no books...</>
+      )}
     </div>
   );
 };
