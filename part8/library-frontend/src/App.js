@@ -11,6 +11,7 @@ import LoginForm from "./components/LoginForm";
 import { ALL_AUTHORS } from "./queries";
 
 const Notify = ({ errorMessage }) => {
+  console.log(errorMessage);
   if (!errorMessage) {
     return null;
   }
@@ -26,8 +27,16 @@ const App = () => {
   const [errorMessage, setErrorMessage] = useState(null);
   const result = useQuery(ALL_AUTHORS);
   const client = useApolloClient();
-  console.log(result);
+  //console.log(result);
   //console.log(booksResult);
+
+  useEffect(() => {
+    const userFromStorage = localStorage.getItem("library-user-token");
+    if (userFromStorage) {
+      setToken(userFromStorage);
+    }
+  }, []);
+
   if (result.loading) {
     return <div>loading...</div>;
   }

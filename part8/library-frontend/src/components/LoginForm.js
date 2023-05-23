@@ -24,6 +24,8 @@ const LoginForm = ({ setError, setToken }) => {
     event.preventDefault();
 
     login({ variables: { username, password } });
+    setUsername("");
+    setPassword("");
   };
 
   return (
