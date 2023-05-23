@@ -12,6 +12,17 @@ tr:hover {
 td {
   padding: 0.5rem;
 }
+button {
+  padding: 0.5rem;
+  background-color: #142d4c;
+  border-color: #fff;
+  border-radius: 15px;
+  color: white;
+  margin: 10px;
+}
+button:hover {
+  background-color: #385170;
+}
 .title {
   text-align: center;
 }
@@ -47,5 +58,5 @@ td {
   padding: 1rem;
 }
 .nav-link:hover {
-  color: blue;
+  color: #9fd3c7;
 }

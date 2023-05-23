@@ -13,9 +13,8 @@ const Nav = ({ logout }) => {
         <Link to="/newbook" className="nav-link">
           Add a Book
         </Link>
-        <li>
-          <button onClick={logout}>logout</button>
-        </li>
+
+        <button onClick={logout}>logout</button>
       </ul>
     </div>
   );
