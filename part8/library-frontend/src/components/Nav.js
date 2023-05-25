@@ -1,6 +1,13 @@
 import { Link } from "react-router-dom";
+import { useQuery } from "@apollo/client";
+import { USER } from "../queries";
 
 const Nav = ({ logout }) => {
+  const result = useQuery(USER);
+  //console.log(result);
+  /*   const data = result.data.me || null; */
+
+  //console.log(username);
   return (
     <div className="nav">
       <ul className="nav-list">
@@ -16,7 +23,12 @@ const Nav = ({ logout }) => {
         <Link to="/recommendations" className="nav-link">
           Recommendations
         </Link>
-
+        {/*   {username && (
+          <li
+            className="nav-li"
+            id="nav-username"
+          >{`${username} is signed in...`}</li>
+        )} */}
         <button onClick={logout}>logout</button>
       </ul>
     </div>

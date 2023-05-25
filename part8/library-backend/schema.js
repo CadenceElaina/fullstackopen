@@ -54,7 +54,10 @@ type Mutation {
 		username: String!
 		password: String!
 	): Token
+}
 
+type Subscription {
+	bookAdded: Book!
 }
 `;
 

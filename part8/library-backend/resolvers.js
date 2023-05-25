@@ -1,6 +1,9 @@
 require("dotenv").config();
 const { GraphQLError } = require("graphql");
 const jwt = require("jsonwebtoken");
+const { PubSub } = require("graphql-subscriptions");
+const pubsub = new PubSub();
+
 const Author = require("./models/author");
 const Book = require("./models/book");
 const User = require("./models/user");
@@ -57,9 +60,7 @@ const resolvers = {
   },
   Mutation: {
     addBook: async (root, args, context) => {
-      const currentUser = context.currentUser;
-
-      if (!currentUser) {
+      if (!context.currentUser) {
         throw new GraphQLError("not authenticated", {
           extensions: {
             code: "UNAUTHENTICATED",
@@ -67,9 +68,11 @@ const resolvers = {
         });
       }
 
-      const authorExists = await Author.findOne({ name: args.author });
-      if (!authorExists) {
-        const author = new Author({ name: args.author });
+      let author = await Author.findOne({ name: args.author });
+
+      if (!author) {
+        author = new Author({ name: args.author });
+
         try {
           await author.save();
         } catch (error) {
@@ -80,18 +83,20 @@ const resolvers = {
         }
       }
 
-      const foundAuthor = await Author.findOne({ name: args.author });
-      console.log(foundAuthor, "foundAuthor");
+      const book = new Book({ ...args, author });
 
-      const book = new Book({ ...args, author: foundAuthor });
       try {
-        return await book.save();
+        await book.save();
       } catch (error) {
         throw new GraphQLError("Error saving book", {
           code: "BAD_USER_INPUT",
           error,
         });
       }
+
+      pubsub.publish("BOOK_ADDED", { bookAdded: book });
+
+      return book;
     },
     editAuthor: async (root, args, context) => {
       const currentUser = context.currentUser;
@@ -147,6 +152,11 @@ const resolvers = {
       };
 
       return { value: jwt.sign(userForToken, process.env.JWT_SECRET) };
+    },
+  },
+  Subscription: {
+    bookAdded: {
+      subscribe: () => pubsub.asyncIterator("BOOK_ADDED"),
     },
   },
 };

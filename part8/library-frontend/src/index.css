@@ -57,6 +57,12 @@ button:hover {
 .nav-link {
   padding: 1rem;
 }
+.nav-li {
+  padding: 1rem;
+  list-style: none;
+}
+#nav-username {
+}
 .nav-link:hover {
   color: #9fd3c7;
 }

@@ -26,7 +26,7 @@ const Books = (props) => {
       <h2>books</h2>
       <p>Genre is {genre}</p>
       {books.length > 0 ? (
-        <div>
+        <div className="container">
           <table>
             <tbody>
               <tr>
