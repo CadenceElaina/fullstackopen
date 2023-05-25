@@ -29,7 +29,7 @@ const LoginForm = ({ setError, setToken }) => {
   };
 
   return (
-    <div>
+    <div className="container">
       <form onSubmit={submit}>
         <div>
           username{" "}

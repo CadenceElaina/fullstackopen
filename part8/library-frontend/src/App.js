@@ -9,6 +9,7 @@ import Nav from "./components/Nav";
 import LoginForm from "./components/LoginForm";
 
 import { ALL_AUTHORS } from "./queries";
+import Recommendations from "./components/Recommendations";
 
 const Notify = ({ errorMessage }) => {
   console.log(errorMessage);
@@ -77,8 +78,12 @@ const App = () => {
             <Authors authors={result.data.allAuthors} setError={notify} />
           }
         />
-        <Route path="/books" element={<Books />} />
-        <Route path="/NewBook" element={<NewBook setError={notify} />} />
+        <Route path="/books" element={<Books setError={notify} />} />
+        <Route path="/newbook" element={<NewBook setError={notify} />} />
+        <Route
+          path="/recommendations"
+          element={<Recommendations setError={notify} />}
+        />
       </Routes>
     </div>
   );

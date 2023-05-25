@@ -13,6 +13,9 @@ const Nav = ({ logout }) => {
         <Link to="/newbook" className="nav-link">
           Add a Book
         </Link>
+        <Link to="/recommendations" className="nav-link">
+          Recommendations
+        </Link>
 
         <button onClick={logout}>logout</button>
       </ul>
