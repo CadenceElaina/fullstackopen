@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { useQuery } from "@apollo/client";
 import { ALL_BOOKS, USER } from "../queries";
 
@@ -6,12 +5,18 @@ const Recommendations = () => {
   const books = useQuery(ALL_BOOKS);
   const user = useQuery(USER);
 
+  if (!user.data || !books.data) {
+    return null;
+  }
   if (user.loading || books.loading) {
     return <div>loading...</div>;
   }
+  if (user.error || books.error) {
+    return <p>Something went wrong</p>;
+  }
   console.log(user);
   const { allBooks } = books.data;
-  const favoriteGenre = user.data.me.favoriteGenre;
+  const favoriteGenre = user?.data?.me?.favoriteGenre;
   console.log(favoriteGenre);
   const bookRecommendations = allBooks.filter((b) =>
     b.genres.includes(favoriteGenre)
@@ -43,7 +48,7 @@ const Recommendations = () => {
           </table>
         </div>
       ) : (
-        <>no recommendations...</>
+        <>no recommendations based on your favorite genre {favoriteGenre}...</>
       )}
     </div>
   );
