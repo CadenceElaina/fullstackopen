@@ -4,10 +4,10 @@ import { USER } from "../queries";
 
 const Nav = ({ logout }) => {
   const result = useQuery(USER);
-  console.log(result);
+  //console.log(result);
   const username = result?.data?.me?.username || null;
 
-  console.log(username);
+  //console.log(username);
   return (
     <div className="nav">
       <ul className="nav-list">
