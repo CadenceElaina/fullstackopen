@@ -13,8 +13,14 @@ const NewBook = ({ setError }) => {
   const [addBook] = useMutation(ADD_BOOK, {
     refetchQueries: [{ query: ALL_BOOKS }, { query: ALL_AUTHORS }],
     onError: (error) => {
+      //console.log(error);
+      console.log(error.message);
       const messages = error.graphQLErrors[0].message;
       setError(messages);
+    },
+    onCompleted: (data) => {
+      console.log(data);
+      setError(`added ${data.addBook.title} by ${data.addBook.author.name}`);
     },
     update: (cache, response) => {
       updateCache(cache, { query: ALL_BOOKS }, response.data.addBook);
