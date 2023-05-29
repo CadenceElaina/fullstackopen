@@ -1,14 +1,20 @@
 import { useState, useEffect } from "react";
 import { useMutation } from "@apollo/client";
-import { LOGIN } from "../queries";
+import { LOGIN, USER } from "../queries";
 
-const LoginForm = ({ setError, setToken }) => {
+const LoginForm = ({ setError, setToast, setToken }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const [login, result] = useMutation(LOGIN, {
+    refetchQueries: [{ query: USER }],
     onError: (error) => {
       setError(error.graphQLErrors[0].message);
+    },
+    onCompleted: (data) => {
+      //console.log(data);
+      setToast(`${username} logged in`);
+      setUsername("");
     },
   });
 
@@ -24,7 +30,6 @@ const LoginForm = ({ setError, setToken }) => {
     event.preventDefault();
 
     login({ variables: { username, password } });
-    setUsername("");
     setPassword("");
   };
 

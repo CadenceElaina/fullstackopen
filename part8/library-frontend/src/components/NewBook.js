@@ -3,7 +3,7 @@ import { useMutation } from "@apollo/client";
 import { ALL_AUTHORS, ALL_BOOKS, ADD_BOOK } from "../queries";
 import { updateCache } from "../App";
 
-const NewBook = ({ setError }) => {
+const NewBook = ({ setError, setToastMessage }) => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [published, setPublished] = useState("");
@@ -13,14 +13,17 @@ const NewBook = ({ setError }) => {
   const [addBook] = useMutation(ADD_BOOK, {
     refetchQueries: [{ query: ALL_BOOKS }, { query: ALL_AUTHORS }],
     onError: (error) => {
-      //console.log(error);
+      console.log(error);
       console.log(error.message);
-      const messages = error.graphQLErrors[0].message;
-      setError(messages);
+      /* const messages = error.graphQLErrors[0].message; */
+      setError(error.message);
     },
     onCompleted: (data) => {
       console.log(data);
-      setError(`added ${data.addBook.title} by ${data.addBook.author.name}`);
+      const addedBook = data.addBook;
+      console.log("added book", addedBook);
+      setToastMessage(`${addedBook.title} addedby ${data.addBook.author.name}`);
+      //setError(`added ${data.addBook.title} by ${data.addBook.author.name}`);
     },
     update: (cache, response) => {
       updateCache(cache, { query: ALL_BOOKS }, response.data.addBook);

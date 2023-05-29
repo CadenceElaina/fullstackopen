@@ -7,21 +7,10 @@ import Books from "./components/Books";
 import NewBook from "./components/NewBook";
 import Nav from "./components/Nav";
 import LoginForm from "./components/LoginForm";
+import Notifications from "./components/Notifications";
 
-import { ALL_AUTHORS, ALL_BOOKS, BOOK_ADDED } from "./queries";
+import { ALL_AUTHORS, ALL_BOOKS, BOOK_ADDED, USER } from "./queries";
 import Recommendations from "./components/Recommendations";
-
-const Notify = ({ errorMessage }) => {
-  console.log(errorMessage);
-  if (!errorMessage) {
-    return null;
-  }
-  return (
-    <div className="container error" style={{ color: "red" }}>
-      {errorMessage}
-    </div>
-  );
-};
 
 // function that takes care of manipulating cache
 export const updateCache = (cache, query, addedBook) => {
@@ -44,7 +33,10 @@ export const updateCache = (cache, query, addedBook) => {
 const App = () => {
   const [token, setToken] = useState(null);
   const [errorMessage, setErrorMessage] = useState(null);
+  const [toastMessage, setToastMessage] = useState(null);
   const result = useQuery(ALL_AUTHORS);
+  //const user = useQuery(USER);
+  //console.log(user);
   const client = useApolloClient();
   //console.log(result);
   //console.log(booksResult);
@@ -53,7 +45,7 @@ const App = () => {
     onData: ({ data, client }) => {
       console.log(data.data.bookAdded);
       const addedBook = data.data.bookAdded;
-      notify(`${addedBook.author.name} added`);
+      /* notify(`${addedBook.author.name} added`); */
       updateCache(client.cache, { query: ALL_BOOKS }, addedBook);
     },
   });
@@ -64,21 +56,28 @@ const App = () => {
       setToken(userFromStorage);
     }
   }, []);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setErrorMessage(null);
+      setToastMessage(null);
+    }, 5000);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [errorMessage, toastMessage]);
 
   if (result.loading) {
     return <div>loading...</div>;
   }
 
-  const notify = (message) => {
-    setErrorMessage(message);
-    setTimeout(() => {
-      setErrorMessage(null);
-    }, 10000);
-  };
-
   const logout = () => {
     setToken(null);
+    /*     console.log(user?.data?.me.username);
+    const username = user?.data?.me.username || null;
+    ${username} */
+
     localStorage.clear();
+    setToastMessage(`logged out!`);
     client.resetStore();
   };
 
@@ -86,8 +85,12 @@ const App = () => {
     return (
       <div>
         <h2 className="title">Welcome to the Library</h2>
-        <Notify errorMessage={errorMessage} />
-        <LoginForm setToken={setToken} setError={notify} />
+        <Notifications errorMessage={errorMessage} toast={toastMessage} />
+        <LoginForm
+          setToken={setToken}
+          setError={setErrorMessage}
+          setToast={setToastMessage}
+        />
       </div>
     );
   }
@@ -96,20 +99,31 @@ const App = () => {
     <div>
       <h2 className="title">Welcome to the Library</h2>
       <Nav logout={logout} />
-      <Notify errorMessage={errorMessage} />
+      <Notifications errorMessage={errorMessage} toast={toastMessage} />
 
       <Routes>
         <Route
           path="/"
           element={
-            <Authors authors={result.data.allAuthors} setError={notify} />
+            <Authors
+              authors={result.data.allAuthors}
+              setError={setErrorMessage}
+            />
           }
         />
-        <Route path="/books" element={<Books setError={notify} />} />
-        <Route path="/newbook" element={<NewBook setError={notify} />} />
+        <Route path="/books" element={<Books setError={setErrorMessage} />} />
+        <Route
+          path="/newbook"
+          element={
+            <NewBook
+              setError={setErrorMessage}
+              setToastMessage={setToastMessage}
+            />
+          }
+        />
         <Route
           path="/recommendations"
-          element={<Recommendations setError={notify} />}
+          element={<Recommendations setError={setErrorMessage} />}
         />
       </Routes>
     </div>
