@@ -2,33 +2,28 @@ import { useQuery } from "@apollo/client";
 import { ALL_BOOKS, USER } from "../queries";
 
 const Recommendations = () => {
-  const books = useQuery(ALL_BOOKS);
-  const user = useQuery(USER);
+  const { data: userData, loading: loadingUser } = useQuery(USER);
+  const genre = userData?.me?.favoriteGenre;
+  const { data: booksData, loading: loadingBooks } = useQuery(ALL_BOOKS, {
+    variables: { genre },
+    skip: loadingUser,
+  });
 
-  if (!user.data || !books.data) {
-    return null;
-  }
-  if (user.loading || books.loading) {
-    return <div>loading...</div>;
-  }
-  if (user.error || books.error) {
-    return <p>Something went wrong</p>;
-  }
-  console.log(user);
-  const { allBooks } = books.data;
-  const favoriteGenre = user?.data?.me?.favoriteGenre;
-  console.log(favoriteGenre);
-  const bookRecommendations = allBooks.filter((b) =>
+  const books = booksData?.allBooks || [];
+  /*   const bookRecommendations = allBooks.filter((b) =>
     b.genres.includes(favoriteGenre)
-  );
+  ); */
+  const username = userData?.me?.username;
+  console.log(genre, userData);
 
   return (
     <div className="container">
       <h2>Recommendations</h2>
-      {bookRecommendations.length > 0 ? (
+      {(loadingBooks || loadingUser) && <p>loading books...</p>}
+      {books.length > 0 ? (
         <div>
           <p>
-            Books in {user.data.me.username}'s favorite genre: {favoriteGenre}
+            Books in {username}'s favorite genre: {genre}
           </p>
           <table>
             <tbody>
@@ -37,7 +32,7 @@ const Recommendations = () => {
                 <th>author</th>
                 <th>published</th>
               </tr>
-              {bookRecommendations.map((b) => (
+              {books.map((b) => (
                 <tr key={b.title}>
                   <td>{b.title}</td>
                   <td>{b.author.name}</td>
@@ -48,7 +43,9 @@ const Recommendations = () => {
           </table>
         </div>
       ) : (
-        <>no recommendations based on your favorite genre {favoriteGenre}...</>
+        <>
+          no recommendations based {username}'s favorite genre: {genre}...
+        </>
       )}
     </div>
   );

@@ -14,32 +14,11 @@ const resolvers = {
   Query: {
     bookCount: () => Book.collection.countDocuments(),
     authorCount: () => Author.collection.countDocuments(),
-    allBooks: async (root, args) => {
-      const books = await Book.find({});
-      let filteredBooks = null;
-      let author = null;
-      if (args.author && args.genre) {
-        author = await Author.findOne({ name: args.author });
-        filteredBooks = await Book.find({
-          author: author.id,
-          genres: { $in: [args.genre] },
-        });
-        return filteredBooks;
-      }
-      if (args.author) {
-        author = await Author.findOne({ name: args.author });
-        filteredBooks = await Book.find({ author: author.id });
-        return filteredBooks;
-      }
-
-      if (args.genre) {
-        filteredBooks = await Book.find({
-          genres: { $in: [args.genre] },
-        });
-        return filteredBooks;
-      }
-
-      return books;
+    allBooks: async (root, { author, genre }) => {
+      let filter = {};
+      if (author) filter.author = await Author.findOne({ name: author });
+      if (genre) filter.genres = genre;
+      return Book.find(filter);
     },
     allAuthors: async () => Author.find({}),
     me: (root, args, context) => {
@@ -59,7 +38,11 @@ const resolvers = {
     },
   },
   Mutation: {
-    addBook: async (root, args, context) => {
+    addBook: async (
+      root,
+      { author: name, genres, published, title },
+      context
+    ) => {
       if (!context.currentUser) {
         throw new GraphQLError("not authenticated", {
           extensions: {
@@ -68,11 +51,10 @@ const resolvers = {
         });
       }
 
-      let author = await Author.findOne({ name: args.author });
+      let author = await Author.findOne({ name });
 
       if (!author) {
-        author = new Author({ name: args.author });
-
+        author = new Author({ name });
         try {
           await author.save();
         } catch (error) {
@@ -83,7 +65,7 @@ const resolvers = {
         }
       }
 
-      const book = new Book({ ...args, author });
+      const book = new Book({ author, genres, published, title });
 
       try {
         await book.save();
@@ -126,7 +108,10 @@ const resolvers = {
       }
     },
     createUser: async (root, args) => {
-      const user = new User({ username: args.username });
+      const user = new User({
+        username: args.username,
+        favoriteGenre: args.favoriteGenre,
+      });
       try {
         return await user.save();
       } catch (error) {

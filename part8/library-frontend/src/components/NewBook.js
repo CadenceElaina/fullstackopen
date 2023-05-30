@@ -10,13 +10,14 @@ const NewBook = ({ setError, setToastMessage }) => {
   const [genre, setGenre] = useState("");
   const [genres, setGenres] = useState([]);
 
-  const [addBook] = useMutation(ADD_BOOK, {
+  const [addBook] = useMutation(ADD_BOOK);
+  /* , {
     refetchQueries: [{ query: ALL_BOOKS }, { query: ALL_AUTHORS }],
     onError: (error) => {
       console.log(error);
       console.log(error.message);
       /* const messages = error.graphQLErrors[0].message; */
-      setError(error.message);
+  /*    setError(error.message);
     },
     onCompleted: (data) => {
       console.log(data);
@@ -28,13 +29,21 @@ const NewBook = ({ setError, setToastMessage }) => {
     update: (cache, response) => {
       updateCache(cache, { query: ALL_BOOKS }, response.data.addBook);
     },
-  });
+  }); */
 
   const submit = async (event) => {
     event.preventDefault();
 
     addBook({
       variables: { title, author, published: parseInt(published), genres },
+      refetchQueries: [
+        { query: ALL_AUTHORS },
+        { query: ALL_BOOKS },
+        ...genres.map((g) => ({
+          query: ALL_BOOKS,
+          variables: { genre: g },
+        })),
+      ],
     });
 
     setTitle("");
