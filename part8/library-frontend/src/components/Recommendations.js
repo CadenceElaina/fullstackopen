@@ -14,7 +14,7 @@ const Recommendations = () => {
     b.genres.includes(favoriteGenre)
   ); */
   const username = userData?.me?.username;
-  console.log(genre, userData);
+  //console.log(genre, userData);
 
   return (
     <div className="container">

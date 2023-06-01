@@ -9,7 +9,13 @@ import Nav from "./components/Nav";
 import LoginForm from "./components/LoginForm";
 import Notifications from "./components/Notifications";
 
-import { ALL_AUTHORS, ALL_BOOKS, BOOK_ADDED, USER } from "./queries";
+import {
+  ALL_AUTHORS,
+  ALL_BOOKS,
+  BOOK_ADDED,
+  USER,
+  USER_LOGGED_IN,
+} from "./queries";
 import Recommendations from "./components/Recommendations";
 
 // function that takes care of manipulating cache
@@ -47,6 +53,22 @@ const App = () => {
       const addedBook = data.data.bookAdded;
       /* notify(`${addedBook.author.name} added`); */
       updateCache(client.cache, { query: ALL_BOOKS }, addedBook);
+    },
+  });
+
+  useSubscription(USER_LOGGED_IN, {
+    onData: ({ data }) => {
+      console.log(data);
+      const user = data.data.userLoggedIn;
+      const username = user.username;
+      const favoriteGenre = user.favoriteGenre;
+      /* notify(`${addedBook.author.name} added`); */
+      client.cache.updateQuery({ query: USER }, ({ me }) => {
+        console.log({ me });
+        return {
+          me: { username, favoriteGenre },
+        };
+      });
     },
   });
 

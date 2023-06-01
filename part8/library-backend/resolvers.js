@@ -136,12 +136,17 @@ const resolvers = {
         id: user._id,
       };
 
+      pubsub.publish("USER_LOGGED_IN", { userLoggedIn: user });
+
       return { value: jwt.sign(userForToken, process.env.JWT_SECRET) };
     },
   },
   Subscription: {
     bookAdded: {
       subscribe: () => pubsub.asyncIterator("BOOK_ADDED"),
+    },
+    userLoggedIn: {
+      subscribe: () => pubsub.asyncIterator("USER_LOGGED_IN"),
     },
   },
 };

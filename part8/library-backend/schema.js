@@ -58,6 +58,7 @@ type Mutation {
 
 type Subscription {
 	bookAdded: Book!
+	userLoggedIn: User!
 }
 `;
 

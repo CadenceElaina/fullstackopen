@@ -86,3 +86,13 @@ export const BOOK_ADDED = gql`
 
   ${BOOK_DETAILS}
 `;
+
+export const USER_LOGGED_IN = gql`
+  subscription {
+    userLoggedIn {
+      username
+      favoriteGenre
+      id
+    }
+  }
+`;
