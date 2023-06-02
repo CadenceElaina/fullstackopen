@@ -47,18 +47,19 @@ const App = () => {
   //console.log(result);
   //console.log(booksResult);
 
+  //App.js:32 Uncaught TypeError: Cannot destructure property 'allBooks' of '_ref' as it is null. ???
   useSubscription(BOOK_ADDED, {
     onData: ({ data, client }) => {
       console.log(data.data.bookAdded);
       const addedBook = data.data.bookAdded;
-      /* notify(`${addedBook.author.name} added`); */
+      setToastMessage(`${addedBook.title} by ${addedBook.author.name} added`);
       updateCache(client.cache, { query: ALL_BOOKS }, addedBook);
     },
   });
 
   useSubscription(USER_LOGGED_IN, {
     onData: ({ data }) => {
-      console.log(data);
+      // console.log(data);
       const user = data.data.userLoggedIn;
       const username = user.username;
       const favoriteGenre = user.favoriteGenre;
