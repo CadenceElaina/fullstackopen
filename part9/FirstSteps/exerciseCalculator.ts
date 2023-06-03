@@ -1,10 +1,10 @@
-import { question } from "readline-sync";
+/* import { question } from "readline-sync";
 
-interface rawValues {
+export interface rawValues {
   rawTarget: string;
   rawDailyHours: string[];
 }
-
+ */
 interface parsedValues {
   parsedTarget: number;
   parsedDailyHours: number[];
@@ -19,13 +19,14 @@ interface Result {
   target: number;
   average: number;
 }
-
+/* 
 const getInput = (): rawValues => {
   const rawTarget = question("What is your target value?");
 
   let day = 1;
   const rawDailyHours: string[] = [];
 
+  // eslint-disable-next-line no-constant-condition
   while (true) {
     const input = question(
       `How many hours did you exercise on day ${day}? (Press 'enter' to quit): `
@@ -41,10 +42,10 @@ const getInput = (): rawValues => {
 
   return { rawTarget, rawDailyHours };
 };
-
-const parseInput = (
-  rawTarget: string,
-  rawDailyHours: string[]
+ */
+export const parseInput = (
+  rawTarget: string | number,
+  rawDailyHours: (string | number)[]
 ): parsedValues => {
   const nums: number[] = rawDailyHours.map((n) => Number(n));
   const hasNegative: boolean = nums.some((n) => n < 0);
@@ -78,7 +79,7 @@ const parseInput = (
   };
 };
 
-const calculate = (target: number, data: number[]): Result => {
+export const calculate = (target: number, data: number[]): Result => {
   const trainedDays = data.filter((d) => d > 0).length;
   const avg = data.reduce((acc, curr) => acc + curr) / data.length;
   const bool = avg >= target;
@@ -115,7 +116,7 @@ const calculate = (target: number, data: number[]): Result => {
   };
 };
 
-try {
+/* try {
   const { rawTarget, rawDailyHours } = getInput();
   //console.log(rawTarget, rawDailyHours);
   const { parsedTarget, parsedDailyHours } = parseInput(
@@ -128,5 +129,5 @@ try {
   if (error instanceof Error) {
     console.log("error message: ", error.message);
   }
-}
+} */
 //console.log(calculate([3, 0, 2, 4.5, 0, 3, 1], 2));
