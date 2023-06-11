@@ -3,13 +3,21 @@ import axios from "axios";
 import { Diary, NewDiary } from "./types";
 import { createDiary, getAllDiaries /* createDiary */ } from "./diaryService";
 
+interface radioInput {
+  label: string;
+  value: string;
+  checked: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  setter: React.Dispatch<React.SetStateAction<string>>;
+}
+
 function App() {
   //update
   const [error, setError] = useState<string>();
   const [diaries, setDiaries] = useState<Diary[]>([]);
   const [newDiary, setNewDiary] = useState({});
   const [date, setDate] = useState("");
-  const [visibility, setVisibility] = useState("");
+  const [visibility, setVisibility] = useState<string>("");
   const [weather, setWeather] = useState("");
   const [comment, setComment] = useState("");
 
@@ -55,6 +63,19 @@ function App() {
     }
   };
 
+  const RadioInput = ({ label, value, checked, setter }: radioInput) => {
+    return (
+      <label>
+        <input
+          type="radio"
+          checked={checked == value}
+          onChange={() => setter(value)}
+        />
+        <span>{label}</span>
+      </label>
+    );
+  };
+
   return (
     <div className="App">
       {error && <div className="error">Error: {error}</div>}
@@ -63,24 +84,73 @@ function App() {
         <div>
           date
           <input
+            type="date"
             value={date}
             onChange={({ target }) => setDate(target.value)}
           />
         </div>
         <div>
           visibility
-          <input
-            value={visibility}
-            onChange={({ target }) => setVisibility(target.value)}
-          />
+          <div>
+            <RadioInput
+              label="good"
+              value="good"
+              checked={visibility}
+              setter={setVisibility}
+            />
+          </div>
+          <div>
+            <RadioInput
+              label="ok"
+              value="ok"
+              checked={visibility}
+              setter={setVisibility}
+            />
+          </div>
+          <div>
+            <RadioInput
+              label="poor"
+              value="poor"
+              checked={visibility}
+              setter={setVisibility}
+            />
+          </div>
         </div>
-        <div>
-          weather
-          <input
-            value={weather}
-            onChange={({ target }) => setWeather(target.value)}
-          />
-        </div>
+        <fieldset>
+          <div>
+            weather
+            <RadioInput
+              label="sunny"
+              value="sunny"
+              checked={weather}
+              setter={setWeather}
+            />
+            <RadioInput
+              label="rainy"
+              value="rainy"
+              checked={weather}
+              setter={setWeather}
+            />
+            <RadioInput
+              label="cloudy"
+              value="cloudy"
+              checked={weather}
+              setter={setWeather}
+            />
+            <RadioInput
+              label="stormy"
+              value="stormy"
+              checked={weather}
+              setter={setWeather}
+            />
+            <RadioInput
+              label="windy"
+              value="windy"
+              checked={weather}
+              setter={setWeather}
+            />
+          </div>
+        </fieldset>
         comment
         <input
           value={comment}
