@@ -63,6 +63,7 @@ function App() {
     }
   };
 
+  //https://dev.to/diraskreact/simple-way-to-use-multiple-radio-buttons-in-react-32df
   const RadioInput = ({ label, value, checked, setter }: radioInput) => {
     return (
       <label>
