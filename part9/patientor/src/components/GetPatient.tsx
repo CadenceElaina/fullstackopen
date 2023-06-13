@@ -22,96 +22,79 @@ import FemaleIcon from "@mui/icons-material/Female";
 import TransgenderIcon from "@mui/icons-material/Transgender";
 
 import { apiBaseUrl } from "../constants";
-import { Patient, Entry } from "../types";
+import { Patient, Diagnosis, Entry } from "../types";
 
 import patientService from "../services/patients";
-import PatientListPage from "./PatientListPage";
+import diagnosisService from "../services/diagnosis";
 
-import HealthRatingBar from "./HealthRatingBar";
-
-interface Props {
-  patients: Patient[];
-  setPatients: React.Dispatch<React.SetStateAction<Patient[]>>;
-}
-
-const GetPatient = ({ patients, setPatients }: Props) => {
-  const [foundPatient, setFoundPatient] = useState<Patient[]>([]);
-  const { id } = useParams();
+const GetPatient = () => {
+  const id = useParams().id as string;
+  const [patient, setPatient] = useState<Patient>();
+  const [diagnosis, setDiagnosis] = useState<Diagnosis[]>();
 
   useEffect(() => {
-    void axios.get<void>(`${apiBaseUrl}/ping`);
-
-    const fetchPatientList = async () => {
-      const patients = await patientService.getPatient(id);
-      //console.log(patients);
-      const empty: Patient[] = [];
-      setFoundPatient(empty.concat(patients));
+    const fetchData = async () => {
+      const patientFetch = await patientService.getPatient(id);
+      setPatient(patientFetch);
     };
-    void fetchPatientList();
+
+    const fetchDiagnosis = async () => {
+      const diagnosisFetch = await diagnosisService.getAll();
+      setDiagnosis(diagnosisFetch);
+    };
+    fetchData();
+    fetchDiagnosis();
   }, []);
-  console.log(foundPatient);
+
+  if (!patient) {
+    return <></>;
+  }
+
   return (
-    <div className="App">
-      <Box>
-        <Typography align="center" variant="h6">
-          Patient list
-        </Typography>
-      </Box>
-      <Table style={{ marginBottom: "1em" }}>
-        <TableHead>
-          <TableRow>
-            <TableCell>Name</TableCell>
-            <TableCell>Date of birth</TableCell>
-            <TableCell>SSN</TableCell>
-            <TableCell>Gender</TableCell>
-            <TableCell>Occupation</TableCell>
-            <TableCell>Health Rating</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {Object.values(foundPatient).map((patient: Patient) => (
-            <TableRow key={patient.id}>
-              <TableCell>{patient.name}</TableCell>
-              <TableCell>{patient.dateOfBirth}</TableCell>
-              <TableCell>{patient.ssn}</TableCell>
-              <TableCell>
-                {patient.gender}
-                {patient.gender === "other" ? (
-                  <TransgenderIcon></TransgenderIcon>
-                ) : patient.gender === "female" ? (
-                  <FemaleIcon></FemaleIcon>
-                ) : (
-                  <MaleIcon></MaleIcon>
-                )}
-              </TableCell>
-              <TableCell>{patient.occupation}</TableCell>
-              <TableCell>
-                <HealthRatingBar showText={false} rating={1} />
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+    <div className="inner-container">
       <Typography align="left" variant="h6">
-        Entries
+        {patient.name} {/* {patient.gender} */}{" "}
+        {patient.gender === "other" ? (
+          <TransgenderIcon></TransgenderIcon>
+        ) : patient.gender === "female" ? (
+          <FemaleIcon></FemaleIcon>
+        ) : (
+          <MaleIcon></MaleIcon>
+        )}
       </Typography>
-      <div>
-        {Object.values(foundPatient).map((patient: Patient) => (
-          <>
-            {patient.entries?.map((entry: Entry) => (
-              <>
-                <p>
-                  {entry.date} <em>{entry.description}</em>
-                </p>
-                <ul>
-                  {entry.diagnosisCodes?.map((code) => (
-                    <li key={code}>{code}</li>
-                  ))}
-                </ul>
-              </>
-            ))}
-          </>
-        ))}
+      <div>ssn: {patient.ssn}</div>
+      <div>occupation: {patient.occupation}</div>
+
+      <div className="inner-container">
+        <Typography align="left" variant="h6">
+          Entries
+        </Typography>
+        {patient.entries
+          ? patient.entries.map((entry) => {
+              let diag;
+              if (entry.diagnosisCodes) {
+                diag = diagnosis?.filter((d) => {
+                  if (entry.diagnosisCodes?.includes(d.code)) {
+                    return d.code + " " + d.name;
+                  }
+                });
+              }
+              const printDiag = diag?.map((elem) => (
+                <li key={elem.code}>
+                  {elem.code} {elem.name}
+                </li>
+              ));
+              return (
+                <div key={entry.id}>
+                  <div>Physician: {entry.specialist}</div>
+                  <div>
+                    {entry.date} - <em>{entry.description}</em>
+                  </div>
+                  <ul>{printDiag}</ul>
+                </div>
+              );
+            })
+          : null}
       </div>
     </div>
   );
