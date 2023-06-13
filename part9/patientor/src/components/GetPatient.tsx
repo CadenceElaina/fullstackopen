@@ -1,4 +1,11 @@
-import { useState, useEffect } from "react";
+import {
+  useState,
+  useEffect,
+  JSXElementConstructor,
+  ReactElement,
+  ReactFragment,
+  ReactPortal,
+} from "react";
 import { useParams } from "react-router-dom";
 import {
   Box,
@@ -15,7 +22,7 @@ import FemaleIcon from "@mui/icons-material/Female";
 import TransgenderIcon from "@mui/icons-material/Transgender";
 
 import { apiBaseUrl } from "../constants";
-import { Patient } from "../types";
+import { Patient, Entry } from "../types";
 
 import patientService from "../services/patients";
 import PatientListPage from "./PatientListPage";
@@ -42,7 +49,7 @@ const GetPatient = ({ patients, setPatients }: Props) => {
     };
     void fetchPatientList();
   }, []);
-  //console.log(foundPatient);
+  console.log(foundPatient);
   return (
     <div className="App">
       <Box>
@@ -85,6 +92,27 @@ const GetPatient = ({ patients, setPatients }: Props) => {
           ))}
         </TableBody>
       </Table>
+      <Typography align="left" variant="h6">
+        Entries
+      </Typography>
+      <div>
+        {Object.values(foundPatient).map((patient: Patient) => (
+          <>
+            {patient.entries?.map((entry: Entry) => (
+              <>
+                <p>
+                  {entry.date} <em>{entry.description}</em>
+                </p>
+                <ul>
+                  {entry.diagnosisCodes?.map((code) => (
+                    <li key={code}>{code}</li>
+                  ))}
+                </ul>
+              </>
+            ))}
+          </>
+        ))}
+      </div>
     </div>
   );
 };
